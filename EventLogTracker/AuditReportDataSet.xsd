@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="AuditReportDataSet" targetNamespace="http://tempuri.org/AuditReportDataSet.xsd" xmlns:mstns="http://tempuri.org/AuditReportDataSet.xsd" xmlns="http://tempuri.org/AuditReportDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="AuditReportDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="AuditReportDataSet" msprop:Generator_UserDSName="AuditReportDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="auditreport" msprop:Generator_TableClassName="auditreportDataTable" msprop:Generator_TableVarName="tableauditreport" msprop:Generator_RowChangedName="auditreportRowChanged" msprop:Generator_TablePropName="auditreport" msprop:Generator_RowDeletingName="auditreportRowDeleting" msprop:Generator_RowChangingName="auditreportRowChanging" msprop:Generator_RowEvHandlerName="auditreportRowChangeEventHandler" msprop:Generator_RowDeletedName="auditreportRowDeleted" msprop:Generator_RowClassName="auditreportRow" msprop:Generator_UserTableName="auditreport" msprop:Generator_RowEvArgName="auditreportRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="VehicleNumber" msprop:Generator_ColumnVarNameInTable="columnVehicleNumber" msprop:Generator_ColumnPropNameInRow="VehicleNumber" msprop:Generator_ColumnPropNameInTable="VehicleNumberColumn" msprop:Generator_UserColumnName="VehicleNumber" type="xs:string" />
+              <xs:element name="Date" msprop:Generator_ColumnVarNameInTable="columnDate" msprop:Generator_ColumnPropNameInRow="Date" msprop:Generator_ColumnPropNameInTable="DateColumn" msprop:Generator_UserColumnName="Date" type="xs:dateTime" />
+              <xs:element name="FirstName" msprop:Generator_ColumnVarNameInTable="columnFirstName" msprop:Generator_ColumnPropNameInRow="FirstName" msprop:Generator_ColumnPropNameInTable="FirstNameColumn" msprop:Generator_UserColumnName="FirstName" type="xs:string" />
+              <xs:element name="LastName" msprop:Generator_ColumnVarNameInTable="columnLastName" msprop:Generator_ColumnPropNameInRow="LastName" msprop:Generator_ColumnPropNameInTable="LastNameColumn" msprop:Generator_UserColumnName="LastName" type="xs:string" />
+              <xs:element name="Findings" msprop:Generator_ColumnVarNameInTable="columnFindings" msprop:Generator_ColumnPropNameInRow="Findings" msprop:Generator_ColumnPropNameInTable="FindingsColumn" msprop:Generator_UserColumnName="Findings" type="xs:string" />
+              <xs:element name="Notes" msprop:Generator_ColumnVarNameInTable="columnNotes" msprop:Generator_ColumnPropNameInRow="Notes" msprop:Generator_ColumnPropNameInTable="NotesColumn" msprop:Generator_UserColumnName="Notes" type="xs:string" />
+              <xs:element name="CleanlinessNotes" msprop:Generator_ColumnVarNameInTable="columnCleanlinessNotes" msprop:Generator_ColumnPropNameInRow="CleanlinessNotes" msprop:Generator_ColumnPropNameInTable="CleanlinessNotesColumn" msprop:Generator_UserColumnName="CleanlinessNotes" type="xs:string" />
+              <xs:element name="ConesCorrect" msprop:Generator_ColumnVarNameInTable="columnConesCorrect" msprop:Generator_ColumnPropNameInRow="ConesCorrect" msprop:Generator_ColumnPropNameInTable="ConesCorrectColumn" msprop:Generator_UserColumnName="ConesCorrect" type="xs:string" />
+              <xs:element name="SignsCorrect" msprop:Generator_ColumnVarNameInTable="columnSignsCorrect" msprop:Generator_ColumnPropNameInRow="SignsCorrect" msprop:Generator_ColumnPropNameInTable="SignsCorrectColumn" msprop:Generator_UserColumnName="SignsCorrect" type="xs:string" />
+              <xs:element name="FirstAidCorrect" msprop:Generator_ColumnVarNameInTable="columnFirstAidCorrect" msprop:Generator_ColumnPropNameInRow="FirstAidCorrect" msprop:Generator_ColumnPropNameInTable="FirstAidCorrectColumn" msprop:Generator_UserColumnName="FirstAidCorrect" type="xs:string" />
+              <xs:element name="FireExtinguisherCorrect" msprop:Generator_ColumnVarNameInTable="columnFireExtinguisherCorrect" msprop:Generator_ColumnPropNameInRow="FireExtinguisherCorrect" msprop:Generator_ColumnPropNameInTable="FireExtinguisherCorrectColumn" msprop:Generator_UserColumnName="FireExtinguisherCorrect" type="xs:string" minOccurs="0" />
+              <xs:element name="ToolNotes" msprop:Generator_ColumnVarNameInTable="columnToolNotes" msprop:Generator_ColumnPropNameInRow="ToolNotes" msprop:Generator_ColumnPropNameInTable="ToolNotesColumn" msprop:Generator_UserColumnName="ToolNotes" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
