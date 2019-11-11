@@ -181,6 +181,7 @@ namespace EventLogTracker
                 strMessage += "<td><b>First Name</b></td>";
                 strMessage += "<td><b>Last Name</b></td>";
                 strMessage += "<td><b>Home Office</b></td>";
+                strMessage += "<td><b>Manager</b>N/td>";
                 strMessage += "</tr>";
                 strMessage += "<p>               </p>";
 
@@ -191,6 +192,7 @@ namespace EventLogTracker
                     strMessage += "<td>" + TheVehicleExceptionDataSet.vehicleexception[intCounter].FirstName + "</td>";
                     strMessage += "<td>" + TheVehicleExceptionDataSet.vehicleexception[intCounter].LastName + "</td>";
                     strMessage += "<td>" + TheVehicleExceptionDataSet.vehicleexception[intCounter].AssignedOffice + "</td>";
+                    strMessage += "<td>" + TheVehicleExceptionDataSet.vehicleexception[intCounter].Manager + "</td>";
                     strMessage += "</tr>";
                 }
 
@@ -219,6 +221,8 @@ namespace EventLogTracker
             DateTime datEndDate;
             string strFirstNamed = "";
             string strLastName = "";
+            string strManager = "";
+            int intManagerID = 0;
 
             try
             {
@@ -260,11 +264,18 @@ namespace EventLogTracker
                                 {
                                     strLastName = "NOT ASSIGNED";
                                     strFirstNamed = "NOT ASSIGNED";
+                                    strManager = "FLEET MANAGER";
                                 }
                                 else
                                 {
                                     strLastName = TheFindcurrentAssignedVehicleMainByVehicleIDDataSet.FindCurrentAssignedVehicleMainByVehicleID[0].LastName;
                                     strFirstNamed = TheFindcurrentAssignedVehicleMainByVehicleIDDataSet.FindCurrentAssignedVehicleMainByVehicleID[0].FirstName;
+
+                                    intManagerID = TheFindcurrentAssignedVehicleMainByVehicleIDDataSet.FindCurrentAssignedVehicleMainByVehicleID[0].ManagerID;
+
+                                    TheFindEmployeeByEmployeeIDDataSet = TheEmployeeClass.FindEmployeeByEmployeeID(intManagerID);
+
+                                    strManager = TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].FirstName + " " + TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].LastName;
                                 }
 
                                 VehicleExceptionDataSet.vehicleexceptionRow NewVehicleRow = TheVehicleExceptionDataSet.vehicleexception.NewvehicleexceptionRow();
@@ -274,6 +285,7 @@ namespace EventLogTracker
                                 NewVehicleRow.LastName = strLastName;
                                 NewVehicleRow.VehicleID = intVehicleID;
                                 NewVehicleRow.VehicleNumber = TheFindActiveVehicleMainDataSet.FindActiveVehicleMain[intCounter].VehicleNumber;
+                                NewVehicleRow.Manager = strManager;
 
                                 TheVehicleExceptionDataSet.vehicleexception.Rows.Add(NewVehicleRow);
                             }

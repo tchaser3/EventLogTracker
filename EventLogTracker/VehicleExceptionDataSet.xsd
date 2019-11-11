@@ -12,7 +12,7 @@
   <xs:element name="VehicleExceptionDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="VehicleExceptionDataSet" msprop:Generator_UserDSName="VehicleExceptionDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="vehicleexception" msprop:Generator_TableClassName="vehicleexceptionDataTable" msprop:Generator_TableVarName="tablevehicleexception" msprop:Generator_TablePropName="vehicleexception" msprop:Generator_RowDeletingName="vehicleexceptionRowDeleting" msprop:Generator_RowChangingName="vehicleexceptionRowChanging" msprop:Generator_RowEvHandlerName="vehicleexceptionRowChangeEventHandler" msprop:Generator_RowDeletedName="vehicleexceptionRowDeleted" msprop:Generator_UserTableName="vehicleexception" msprop:Generator_RowChangedName="vehicleexceptionRowChanged" msprop:Generator_RowEvArgName="vehicleexceptionRowChangeEvent" msprop:Generator_RowClassName="vehicleexceptionRow">
+        <xs:element name="vehicleexception" msprop:Generator_TableClassName="vehicleexceptionDataTable" msprop:Generator_TableVarName="tablevehicleexception" msprop:Generator_RowChangedName="vehicleexceptionRowChanged" msprop:Generator_TablePropName="vehicleexception" msprop:Generator_RowDeletingName="vehicleexceptionRowDeleting" msprop:Generator_RowChangingName="vehicleexceptionRowChanging" msprop:Generator_RowEvHandlerName="vehicleexceptionRowChangeEventHandler" msprop:Generator_RowDeletedName="vehicleexceptionRowDeleted" msprop:Generator_RowClassName="vehicleexceptionRow" msprop:Generator_UserTableName="vehicleexception" msprop:Generator_RowEvArgName="vehicleexceptionRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="VehicleID" msprop:Generator_ColumnVarNameInTable="columnVehicleID" msprop:Generator_ColumnPropNameInRow="VehicleID" msprop:Generator_ColumnPropNameInTable="VehicleIDColumn" msprop:Generator_UserColumnName="VehicleID" type="xs:int" />
@@ -20,6 +20,7 @@
               <xs:element name="FirstName" msprop:Generator_ColumnVarNameInTable="columnFirstName" msprop:Generator_ColumnPropNameInRow="FirstName" msprop:Generator_ColumnPropNameInTable="FirstNameColumn" msprop:Generator_UserColumnName="FirstName" type="xs:string" />
               <xs:element name="LastName" msprop:Generator_ColumnVarNameInTable="columnLastName" msprop:Generator_ColumnPropNameInRow="LastName" msprop:Generator_ColumnPropNameInTable="LastNameColumn" msprop:Generator_UserColumnName="LastName" type="xs:string" />
               <xs:element name="AssignedOffice" msprop:Generator_ColumnVarNameInTable="columnAssignedOffice" msprop:Generator_ColumnPropNameInRow="AssignedOffice" msprop:Generator_ColumnPropNameInTable="AssignedOfficeColumn" msprop:Generator_UserColumnName="AssignedOffice" type="xs:string" minOccurs="0" />
+              <xs:element name="Manager" msprop:Generator_ColumnVarNameInTable="columnManager" msprop:Generator_ColumnPropNameInRow="Manager" msprop:Generator_ColumnPropNameInTable="ManagerColumn" msprop:Generator_UserColumnName="Manager" type="xs:string" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
