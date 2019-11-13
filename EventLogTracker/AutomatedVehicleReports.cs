@@ -64,6 +64,7 @@ namespace EventLogTracker
         DailyVehicleInspectionSummaryReportDataSet TheDailyVehicleInspectionSummaryReportDataSet = new DailyVehicleInspectionSummaryReportDataSet();
         FindEmployeeByEmployeeIDDataSet TheFindEmployeeByEmployeeIDDataSet = new FindEmployeeByEmployeeIDDataSet();
         FindWeeklyVehicleInspectionNoProblemDataSet TheFindWeeklyVehicleInspectionNoProblemDataSet = new FindWeeklyVehicleInspectionNoProblemDataSet();
+        FindVehiclesInYardByDateRangeDataSet TheFindVehiclesInYardByDateRangeDataSet = new FindVehiclesInYardByDateRangeDataSet();
 
         //settup created data set
         AuditReportDataSet TheAuditReportDataSet = new AuditReportDataSet();
@@ -99,12 +100,85 @@ namespace EventLogTracker
 
                 if (blnFatalError == true)
                     throw new Exception();
+
+                blnFatalError = RunVehiclesInYardReport(datStartDate);
+
+                if (blnFatalError == true)
+                    throw new Exception();
                
             }
             catch(Exception Ex)
             {
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
+        }
+        private bool RunVehiclesInYardReport(DateTime datStartDate)
+        {
+            bool blnFatalError = false;
+            int intCounter;
+            int intNumberOfRecords;
+            string strMessage = "";
+            string strHeader = "Vehicles in Yard for Today";
+            DateTime datEndDate = DateTime.Now;
+            int intManagerID = 0;
+            string strManagerName = "";
+
+            try
+            {
+                datStartDate = TheDateSearchClass.RemoveTime(datStartDate);
+                datEndDate = TheDateSearchClass.AddingDays(datStartDate, 1);
+                TheFindVehiclesInYardByDateRangeDataSet = TheVehicleInYardClass.FindVehiclesInYardByDateRange(datStartDate, datEndDate);
+                intNumberOfRecords = TheFindVehiclesInYardByDateRangeDataSet.FindVehiclesInYardByDateRange.Rows.Count - 1;
+
+                strMessage = "<h1>Vehicles in Yard</h1>";
+                strMessage += "<table>";
+                strMessage += "<tr>";
+                strMessage += "<td><b>Vehicle Number</b></td>";
+                strMessage += "<td><b>First Name</b></td>";
+                strMessage += "<td><b>Last Name</b></td>";
+                strMessage += "<td><b>Assigned Office</b></td>";
+                strMessage += "<td><b>Manager</b></td>";
+                strMessage += "</tr>";
+                strMessage += "<p>               </p>";
+
+                if(intNumberOfRecords > -1)
+                {
+                    for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                    {
+                        intManagerID = TheFindVehiclesInYardByDateRangeDataSet.FindVehiclesInYardByDateRange[intCounter].ManagerID;
+
+                        TheFindEmployeeByEmployeeIDDataSet = TheEmployeeClass.FindEmployeeByEmployeeID(intManagerID);
+                        strManagerName = TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].FirstName + " ";
+                        strManagerName += TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].LastName;
+
+                        if(TheFindVehiclesInYardByDateRangeDataSet.FindVehiclesInYardByDateRange[intCounter].LastName == "WAREHOUSE")
+                        {
+                            strManagerName = "FLEET MANAGER";
+                        }
+
+                        //adding items to message
+                        strMessage += "<tr>";
+                        strMessage += "<td>" + TheFindVehiclesInYardByDateRangeDataSet.FindVehiclesInYardByDateRange[intCounter].VehicleNumber + "</td>";
+                        strMessage += "<td>" + TheFindVehiclesInYardByDateRangeDataSet.FindVehiclesInYardByDateRange[intCounter].FirstName + "</td>";
+                        strMessage += "<td>" + TheFindVehiclesInYardByDateRangeDataSet.FindVehiclesInYardByDateRange[intCounter].LastName + "</td>";
+                        strMessage += "<td>" + TheFindVehiclesInYardByDateRangeDataSet.FindVehiclesInYardByDateRange[intCounter].AssignedOffice + "</td>";
+                        strMessage += "<td>" + strManagerName + "</td>";
+                        strMessage += "</tr>";
+
+                    }
+                }
+
+                TheSendEmailClass.VehicleReports(strHeader, strMessage);
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Automated Reports // Run Vehicles In Yard Report " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+
+
+            return blnFatalError;
         }
         private void RunNoProblemReport()
         {
@@ -122,7 +196,7 @@ namespace EventLogTracker
                 TheFindWeeklyVehicleInspectionNoProblemDataSet = TheWeeklyInspectionClass.FindWeeklyVehicleInspectionNoProblem(datStartDate, datEndDate);
                 intNumberOfRecords = TheFindWeeklyVehicleInspectionNoProblemDataSet.FindWeeklyVehicleInspectionNoProblem.Rows.Count - 1;
 
-                strMessage = "<h1Weekly Inspection No Problem Vs Open Problem Report<h1>";
+                strMessage = "<h1>Weekly Inspection No Problem Vs Open Problem Report</h1>";
                 strMessage += "<table>";
                 strMessage += "<tr>";
                 strMessage += "<td><b>Problem ID</b></td>";
