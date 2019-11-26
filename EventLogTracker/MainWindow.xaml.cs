@@ -228,7 +228,7 @@ namespace EventLogTracker
                     {
                         TheAutomatedVehicleReportsClass.RunWeeklyVehicleInspectionReport();
 
-                        TheAutomatedVehicleReportsClass.RunWeeklyVehiclesInYardReport();
+                        //TheAutomatedVehicleReportsClass.RunWeeklyVehiclesInYardReport();
 
                         TheWeeklyVehicleReportsDateDataSet.weeklyvehiclereportsdate[0].LastWeeklyReport = datTodaysDate;
 
