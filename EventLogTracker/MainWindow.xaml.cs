@@ -32,6 +32,9 @@ using VehicleStatusDLL;
 using VehicleExceptionEmailDLL;
 using NewEmployeeDLL;
 using EmployeeLaborRateDLL;
+using VehicleInYardDLL;
+using VehicleAssignmentDLL;
+using VehicleMainDLL;
 
 namespace EventLogTracker
 {
@@ -55,6 +58,9 @@ namespace EventLogTracker
         EmployeeClass TheEmployeeClass = new EmployeeClass();
         EmployeeLaborRateClass TheEmployeeLaborRateClass = new EmployeeLaborRateClass();
         SendEmailClass TheSendEmailClass = new SendEmailClass();
+        VehicleInYardClass TheVehicleInYardClass = new VehicleInYardClass();
+        VehicleAssignmentClass TheVehicleAssignmentClass = new VehicleAssignmentClass();
+        VehicleMainClass TheVehicleMainClass = new VehicleMainClass();
 
         //setting up the time
         DispatcherTimer MyTimer = new DispatcherTimer();
@@ -71,6 +77,9 @@ namespace EventLogTracker
         FindActiveEmployeesDataSet TheFindActiveEmployeesDataSet = new FindActiveEmployeesDataSet();
         FindEmployeeLaborRateDataSet TheFindEmployeeLaborRateDataSet = new FindEmployeeLaborRateDataSet();
         WeeklyVehicleReportsDateDataSet TheWeeklyVehicleReportsDateDataSet = new WeeklyVehicleReportsDateDataSet();
+        FindWarehouseByWarehouseNameDataSet TheFindWarehouseByWarehouseNameDataSet = new FindWarehouseByWarehouseNameDataSet();
+        FindVehiclesInyardShowingVehicleIDDateRangeDataSet TheFindVehiclesInYardShowingVehicleIDDateRangeDataSet = new FindVehiclesInyardShowingVehicleIDDateRangeDataSet();
+        FindCurrentAssignedVehicleMainByVehicleIDDataSet TheFindCurrentAssignedVehicleMainByVehicleIDDataSet = new FindCurrentAssignedVehicleMainByVehicleIDDataSet();
 
         int gintLogCounter;
         int gintLogUpperLimit;
@@ -140,9 +149,71 @@ namespace EventLogTracker
         {
             UpdateGrid();
             UpdateVehicleStatus();
+            ChangeVehicleInYardToWarehouse();
             TheUpdatingWorkTaskStatsClass.UpdateWorkTaskStatsTable();
             SendVehicleReports();
             CheckEmployeePayRate();
+        }
+        private void ChangeVehicleInYardToWarehouse()
+        {
+            DateTime datStartDate = DateTime.Now;
+            DateTime datEndDate = DateTime.Now;
+            int intCounter;
+            int intNumberOfRecords;
+            int intVehicleID;
+            int intWarehouseID;
+            int intTransactionID;
+            string strWarehouse;
+            bool blnFatalError = false;
+
+            try
+            {
+                datStartDate = TheDateSearchClass.RemoveTime(datStartDate);
+                datEndDate = TheDateSearchClass.AddingDays(datStartDate, 1);
+
+                TheFindVehiclesInYardShowingVehicleIDDateRangeDataSet = TheVehicleInYardClass.FindVehiclesInYardShowingVehicleIDDateRange(datStartDate, datEndDate);
+
+                intNumberOfRecords = TheFindVehiclesInYardShowingVehicleIDDateRangeDataSet.FindVehiclesInYardShowingVehicleDateRange.Rows.Count - 1;
+
+                if(intNumberOfRecords > -1)
+                {
+                    for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                    {
+                        intVehicleID = TheFindVehiclesInYardShowingVehicleIDDateRangeDataSet.FindVehiclesInYardShowingVehicleDateRange[intCounter].VehicleID;
+                        strWarehouse = TheFindVehiclesInYardShowingVehicleIDDateRangeDataSet.FindVehiclesInYardShowingVehicleDateRange[intCounter].AssignedOffice;
+
+                        TheFindWarehouseByWarehouseNameDataSet = TheEmployeeClass.FindWarehouseByWarehouseName(strWarehouse);
+
+                        intWarehouseID = TheFindWarehouseByWarehouseNameDataSet.FindWarehouseByWarehouseName[0].EmployeeID;
+
+                        TheFindCurrentAssignedVehicleMainByVehicleIDDataSet = TheVehicleAssignmentClass.FindCurrentAssignedVehicleMainByVehicleID(intVehicleID);
+
+                        intTransactionID = TheFindCurrentAssignedVehicleMainByVehicleIDDataSet.FindCurrentAssignedVehicleMainByVehicleID[0].TransactionID;
+
+                        blnFatalError = TheVehicleAssignmentClass.UpdateCurrentVehicleAssignment(intTransactionID, false);
+
+                        if (blnFatalError == true)
+                            throw new Exception();
+
+                        blnFatalError = TheVehicleAssignmentClass.InsertVehicleAssignment(intVehicleID, intWarehouseID);
+
+                        if (blnFatalError == true)
+                            throw new Exception();
+
+                        blnFatalError = TheVehicleMainClass.UpdateVehicleMainEmployeeID(intVehicleID, intWarehouseID);
+
+                        if (blnFatalError == true)
+                            throw new Exception();
+
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Main Window // Change Vehicle In Yard To Warehouse " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
         }
         private void CheckEmployeePayRate()
         {
@@ -342,7 +413,7 @@ namespace EventLogTracker
             //LoadEventLogTable();
                     
             MyTimer.Tick += new EventHandler(BeginTheProcess);
-            MyTimer.Interval = new TimeSpan(0, 0, 10);
+            MyTimer.Interval = new TimeSpan(0, 0, 30);
             MyTimer.Start();
             
         }
