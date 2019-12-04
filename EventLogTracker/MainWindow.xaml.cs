@@ -121,9 +121,9 @@ namespace EventLogTracker
                     gintNumberOfRecords = intNumberOfRecords;
                     intNumberOfRecords -= 1;
 
-                    blnEmailSent = TheSendEmailClass.SendEmail("tholmes@bluejaycommunications.com", "New Event Log Entry", TheFindEventLogByDateRangeDataSet.FindEventLogEntriesByDateRange[intNumberOfRecords].LogEntry);
+                    blnEmailSent = TheSendEmailClass.SendEmail("tholmes@bluejaycommunications.com", "New Event Log Entry", TheFindEventLogByDateRangeDataSet.FindEventLogEntriesByDateRange[0].LogEntry);
 
-                    blnEmailSent = TheSendEmailClass.SendEmail("mharmon@bluejaycommunications.com", "New Event Log Entry", TheFindEventLogByDateRangeDataSet.FindEventLogEntriesByDateRange[intNumberOfRecords].LogEntry);
+                    blnEmailSent = TheSendEmailClass.SendEmail("mharmon@bluejaycommunications.com", "New Event Log Entry", TheFindEventLogByDateRangeDataSet.FindEventLogEntriesByDateRange[0].LogEntry);
 
 
                     dgrResults.ItemsSource = TheFindEventLogByDateRangeDataSet.FindEventLogEntriesByDateRange;
