@@ -61,7 +61,7 @@ namespace EventLogTracker
                 blnEmailSent = SendEmail(strEmailAddress, "Vehicle Inspection Failure - Do Not Reply", strVehicleFailed);
             }
         }
-         
+                 
         public bool SendEmail(string mailTo, string subject, string message)
         {
             try

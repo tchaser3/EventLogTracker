@@ -21,6 +21,7 @@ using VehicleAssignmentDLL;
 using WeeklyBulkToolInspectionDLL;
 using WeeklyInspectionsDLL;
 using WeeklyVehicleCleanliness;
+using EmployeeProjectAssignmentDLL;
 
 namespace EventLogTracker
 {
@@ -42,6 +43,7 @@ namespace EventLogTracker
         WeeklyInspectionClass TheWeeklyInspectionClass = new WeeklyInspectionClass();
         WeeklyVehicleCleanlinessClass TheWeeklyVehicleCleanlinessClass = new WeeklyVehicleCleanlinessClass();
         WeeklyBulkToolInspectionClass TheWeeklyBulkToolInspectionClass = new WeeklyBulkToolInspectionClass();
+        EmployeeProjectAssignmentClass TheEmployeeProjectAssignmentClass = new EmployeeProjectAssignmentClass();
 
         //setting up the data
         FindActiveVehicleMainByVehicleNumberDataSet TheFindActiveVehicleMainByVehicleNumberDataSet = new FindActiveVehicleMainByVehicleNumberDataSet();
@@ -65,6 +67,8 @@ namespace EventLogTracker
         FindEmployeeByEmployeeIDDataSet TheFindEmployeeByEmployeeIDDataSet = new FindEmployeeByEmployeeIDDataSet();
         FindWeeklyVehicleInspectionNoProblemDataSet TheFindWeeklyVehicleInspectionNoProblemDataSet = new FindWeeklyVehicleInspectionNoProblemDataSet();
         FindVehiclesInYardByDateRangeDataSet TheFindVehiclesInYardByDateRangeDataSet = new FindVehiclesInYardByDateRangeDataSet();
+        FindProductivityNotCorrectDataSet TheFindProductivityNotCorrectDataSet = new FindProductivityNotCorrectDataSet();
+        FindProductivityManagersForEmailDataSet TheFindProductivityManagersForEmailDataSet = new FindProductivityManagersForEmailDataSet();
 
         //settup created data set
         AuditReportDataSet TheAuditReportDataSet = new AuditReportDataSet();
@@ -105,13 +109,105 @@ namespace EventLogTracker
 
                 if (blnFatalError == true)
                     throw new Exception();
-               
+
+                blnFatalError = RunProductivityNotCorrect();
+
+                if (blnFatalError == false)
+                    throw new Exception();
+
             }
             catch(Exception Ex)
             {
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
         }
+        private bool RunProductivityNotCorrect()
+        {
+            bool blnFatalError = false;
+            DateTime datStartDate;
+            DateTime datEndDate;
+            int intCounter;
+            int intNumberOfRecords;
+            string strMessage;
+            string strHeader = "Productivity Sheets Not Correct"; 
+            int intManagerID;
+            string strManagerName;
+            string strEmailAddress;
+
+
+            try
+            {
+                datEndDate = DateTime.Now;
+                datEndDate = TheDataSearchClass.RemoveTime(datEndDate);
+                datStartDate = TheDateSearchClass.SubtractingDays(datEndDate, 1);
+
+                TheFindProductivityNotCorrectDataSet = TheEmployeeProjectAssignmentClass.FindProductivityNotCorrect(datStartDate, datEndDate);
+                intNumberOfRecords = TheFindProductivityNotCorrectDataSet.FindProductivityNotCorrect.Rows.Count - 1;
+
+                strMessage = "<h1>Productivity Sheets Not Correct</h1>";
+                strMessage += "<table>";
+                strMessage += "<tr>";
+                strMessage += "<td><b>Transaction ID</b></td>";
+                strMessage += "<td><b>Date</b></td>";
+                strMessage += "<td><b>First Name</b></td>";
+                strMessage += "<td><b>Last Name</b></td>";
+                strMessage += "<td><b>Assigned Office</b></td>";
+                strMessage += "<td><b>Manager</b></td>";
+                strMessage += "</tr>";
+                strMessage += "<p>               </p>";
+
+                if(intNumberOfRecords > -1)
+                {
+                    for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                    {
+                        intManagerID = TheFindProductivityNotCorrectDataSet.FindProductivityNotCorrect[intCounter].ManagerID;
+
+                        TheFindEmployeeByEmployeeIDDataSet = TheEmployeeClass.FindEmployeeByEmployeeID(intManagerID);
+                        strManagerName = TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].FirstName + " ";
+                        strManagerName += TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].LastName;
+
+
+                        //adding items to message
+                        strMessage += "<tr>";
+                        strMessage += "<td>" + Convert.ToString(TheFindProductivityNotCorrectDataSet.FindProductivityNotCorrect[intCounter].TransactionID) + "</td>";
+                        strMessage += "<td>" + Convert.ToString(TheFindProductivityNotCorrectDataSet.FindProductivityNotCorrect[intCounter].TransactionDate) + "</td>";
+                        strMessage += "<td>" + TheFindProductivityNotCorrectDataSet.FindProductivityNotCorrect[intCounter].FirstName + "</td>";
+                        strMessage += "<td>" + TheFindProductivityNotCorrectDataSet.FindProductivityNotCorrect[intCounter].LastName + "</td>";
+                        strMessage += "<td>" + TheFindProductivityNotCorrectDataSet.FindProductivityNotCorrect[intCounter].HomeOffice + "</td>";
+                        strMessage += "<td>" + strManagerName + "</td>";
+                        strMessage += "</tr>";
+                    }
+                }
+
+                TheFindProductivityManagersForEmailDataSet = TheEmployeeProjectAssignmentClass.FindProductivityManagersForEmail();
+
+                intNumberOfRecords = TheFindProductivityManagersForEmailDataSet.FindProductivityManagersForEmail.Rows.Count - 1;
+
+                for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                {
+                    strEmailAddress = TheFindProductivityManagersForEmailDataSet.FindProductivityManagersForEmail[intCounter].EmailAddress;
+
+                    blnFatalError = TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage);
+
+                    if (blnFatalError == false)
+                        throw new Exception();
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Automated Vehicle Reprots // Run Productivity Not Correct " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+
+                blnFatalError = true;
+
+            }
+
+            return blnFatalError;
+        }
+
+
         private bool RunVehiclesInYardReport(DateTime datStartDate)
         {
             bool blnFatalError = false;

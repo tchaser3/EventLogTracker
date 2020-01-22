@@ -35,6 +35,7 @@ using EmployeeLaborRateDLL;
 using VehicleInYardDLL;
 using VehicleAssignmentDLL;
 using VehicleMainDLL;
+using EmployeeProjectAssignmentDLL;
 
 namespace EventLogTracker
 {
@@ -61,6 +62,7 @@ namespace EventLogTracker
         VehicleInYardClass TheVehicleInYardClass = new VehicleInYardClass();
         VehicleAssignmentClass TheVehicleAssignmentClass = new VehicleAssignmentClass();
         VehicleMainClass TheVehicleMainClass = new VehicleMainClass();
+        EmployeeProjectAssignmentClass TheEmployeeProjectAssignmentClass = new EmployeeProjectAssignmentClass();
 
         //setting up the time
         DispatcherTimer MyTimer = new DispatcherTimer();
@@ -80,6 +82,7 @@ namespace EventLogTracker
         FindWarehouseByWarehouseNameDataSet TheFindWarehouseByWarehouseNameDataSet = new FindWarehouseByWarehouseNameDataSet();
         FindVehiclesInyardShowingVehicleIDDateRangeDataSet TheFindVehiclesInYardShowingVehicleIDDateRangeDataSet = new FindVehiclesInyardShowingVehicleIDDateRangeDataSet();
         FindCurrentAssignedVehicleMainByVehicleIDDataSet TheFindCurrentAssignedVehicleMainByVehicleIDDataSet = new FindCurrentAssignedVehicleMainByVehicleIDDataSet();
+        FindProductivityNotCorrectDataSet TheFindProductivityNotCorrectClass = new FindProductivityNotCorrectDataSet();
 
         int gintLogCounter;
         int gintLogUpperLimit;
@@ -149,8 +152,7 @@ namespace EventLogTracker
         {
             UpdateGrid();
             UpdateVehicleStatus();
-            ChangeVehicleInYardToWarehouse();
-            TheUpdatingWorkTaskStatsClass.UpdateWorkTaskStatsTable();
+            //ChangeVehicleInYardToWarehouse();
             SendVehicleReports();
             CheckEmployeePayRate();
         }
@@ -288,6 +290,7 @@ namespace EventLogTracker
                         TheVehicleExceptionEmailDataSet.vehicleexceptionemail[0].TransactionDate = datTransactionDate;
                         TheAutomatedVehicleReportsClass.RunAutomatedReports(datTodaysDate);
                         TheVehicleExceptionEmailClass.UpdateVehicleExceptionEmailDB(TheVehicleExceptionEmailDataSet);
+                        TheUpdatingWorkTaskStatsClass.UpdateWorkTaskStatsTable();
                     }
                 }
 
@@ -410,7 +413,7 @@ namespace EventLogTracker
             TheFindEventLogByDateRangeDataSet = TheEventLogClass.FindEventLogByDateRange(datStartDate, datEndDate);
 
             gintNumberOfRecords = TheFindEventLogByDateRangeDataSet.FindEventLogEntriesByDateRange.Rows.Count;
-            //LoadEventLogTable();
+            UpdateGrid();
                     
             MyTimer.Tick += new EventHandler(BeginTheProcess);
             MyTimer.Interval = new TimeSpan(0, 0, 30);
