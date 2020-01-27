@@ -47,6 +47,9 @@
     <Reference Include="DateSearchDLL">
       <HintPath>..\..\Blue Jay Class Library\DateSearchDLL.dll</HintPath>
     </Reference>
+    <Reference Include="DepartmentDLL">
+      <HintPath>..\..\Blue Jay Class Library\DepartmentDLL.dll</HintPath>
+    </Reference>
     <Reference Include="EmployeeLaborRateDLL">
       <HintPath>..\..\Blue Jay Class Library\EmployeeLaborRateDLL.dll</HintPath>
     </Reference>
@@ -67,6 +70,9 @@
     </Reference>
     <Reference Include="NewVehicleDLL">
       <HintPath>..\..\Blue Jay Class Library\NewVehicleDLL.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjectProductivityReportsDLL">
+      <HintPath>..\..\Blue Jay Class Library\ProjectProductivityReportsDLL.dll</HintPath>
     </Reference>
     <Reference Include="SafetyDLL">
       <HintPath>..\..\Blue Jay Class Library\SafetyDLL.dll</HintPath>
@@ -136,6 +142,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AuditReportDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="AutomatedProductionReportsClass.cs" />
     <Compile Include="AutomatedVehicleReports.cs" />
     <Compile Include="DailyVehicleInspectionReportDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -143,6 +150,11 @@
       <DependentUpon>DailyVehicleInspectionReportDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="SendEmailClass.cs" />
+    <Compile Include="TotalProductivityDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TotalProductivityDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="UpdatingWorkTaskStatsClass.cs" />
     <Compile Include="VehicleExceptionDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -212,6 +224,17 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="TotalProductivityDataSet.xsc">
+      <DependentUpon>TotalProductivityDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="TotalProductivityDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>TotalProductivityDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="TotalProductivityDataSet.xss">
+      <DependentUpon>TotalProductivityDataSet.xsd</DependentUpon>
+    </None>
     <None Include="VehicleExceptionDataSet.xsc">
       <DependentUpon>VehicleExceptionDataSet.xsd</DependentUpon>
     </None>
@@ -243,6 +266,35 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="blue_jay_icon_CM1_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>9</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

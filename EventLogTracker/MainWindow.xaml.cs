@@ -63,6 +63,7 @@ namespace EventLogTracker
         VehicleAssignmentClass TheVehicleAssignmentClass = new VehicleAssignmentClass();
         VehicleMainClass TheVehicleMainClass = new VehicleMainClass();
         EmployeeProjectAssignmentClass TheEmployeeProjectAssignmentClass = new EmployeeProjectAssignmentClass();
+        AutomatedProductionReportsClass TheAutomatedProductioinReportsClass = new AutomatedProductionReportsClass();
 
         //setting up the time
         DispatcherTimer MyTimer = new DispatcherTimer();
@@ -144,8 +145,7 @@ namespace EventLogTracker
                 TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Main Window // Update Grid " + Ex.Message);
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
-            }
-           
+            }           
             
         }
         private void BeginTheProcess(object sender, EventArgs e)
@@ -155,6 +155,7 @@ namespace EventLogTracker
             //ChangeVehicleInYardToWarehouse();
             SendVehicleReports();
             CheckEmployeePayRate();
+            
         }
         private void ChangeVehicleInYardToWarehouse()
         {
@@ -306,7 +307,9 @@ namespace EventLogTracker
 
                         TheWeeklyVehicleReportsDateDataSet.weeklyvehiclereportsdate[0].LastWeeklyReport = datTodaysDate;
 
-                        TheVehicleExceptionEmailClass.UpdateWeeklyVehicleReportsDB(TheWeeklyVehicleReportsDateDataSet);                        
+                        TheVehicleExceptionEmailClass.UpdateWeeklyVehicleReportsDB(TheWeeklyVehicleReportsDateDataSet);
+
+                        TheAutomatedProductioinReportsClass.RunAutomatedProductionReports();
                     }
                 }
             }
