@@ -67,7 +67,7 @@ namespace EventLogTracker
                 for(intDepartmentCounter = 0; intDepartmentCounter <= intDepartmentNumberOfRecords; intDepartmentCounter++)
                 {
                     intDepartmentID = TheFindSortedDepartmentDataSet.FindSortedDepartment[intDepartmentCounter].DepartmentID;
-                    strFileName = TheFindSortedDepartmentDataSet.FindSortedDepartment[intDepartmentCounter].Department + Convert.ToString(DateTime.Now.Day + DateTime.Now.Month + DateTime.Now.Year + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".xlsx");
+                    strFileName = TheFindSortedDepartmentDataSet.FindSortedDepartment[intDepartmentCounter].Department + " " + Convert.ToString(DateTime.Now.Day + DateTime.Now.Month + DateTime.Now.Year + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".xlsx");
 
                     TheFindActiveDepartmentProductionEmailProjectsByDepartmentIDDataSet = TheDepartMentClass.FindActiveDepartmentProductionEmailProjectsByDepartmentID(intDepartmentID);
 
