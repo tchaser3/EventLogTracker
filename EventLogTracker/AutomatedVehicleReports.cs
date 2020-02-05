@@ -95,15 +95,15 @@ namespace EventLogTracker
                 if (blnFatalError == true)
                     throw new Exception();
 
-                blnFatalError = RunVehicleExceptionReport(datStartDate);
+                //blnFatalError = RunVehicleExceptionReport(datStartDate);
 
-                if (blnFatalError == true)
-                    throw new Exception();
+                //if (blnFatalError == true)
+                    //throw new Exception();
 
-                blnFatalError = EmailVehicleExceptionReport();
+                //blnFatalError = EmailVehicleExceptionReport();
 
-                if (blnFatalError == true)
-                    throw new Exception();
+                //if (blnFatalError == true)
+                   // throw new Exception();
 
                 blnFatalError = RunVehiclesInYardReport(datStartDate);
 
@@ -351,7 +351,7 @@ namespace EventLogTracker
                 strMessage += "<td><b>First Name</b></td>";
                 strMessage += "<td><b>Last Name</b></td>";
                 strMessage += "<td><b>Home Office</b></td>";
-                strMessage += "<td><b>Manager</b>N/td>";
+                strMessage += "<td><b>Manager</b></td>";
                 strMessage += "</tr>";
                 strMessage += "<p>               </p>";
 
