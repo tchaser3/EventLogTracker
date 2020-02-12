@@ -53,6 +53,7 @@ namespace EventLogTracker
             string strHeader = "Project Productivity Report";
             string strMessage;
             string strEmailAddress;
+            double douTotalPrice;
 
             try
             {
@@ -94,6 +95,9 @@ namespace EventLogTracker
                                     NewProductivityRow.AssignedProjectID = TheFindPrivateProjectProductivityDateRangeDataSet.FindPrivateProjectProductivityDateRange[intProductivityCounter].AssignedProjectID;
                                     NewProductivityRow.ProjectName = TheFindPrivateProjectProductivityDateRangeDataSet.FindPrivateProjectProductivityDateRange[intProductivityCounter].ProjectName;
                                     NewProductivityRow.TotalHours = TheFindPrivateProjectProductivityDateRangeDataSet.FindPrivateProjectProductivityDateRange[intProductivityCounter].TotalHours;
+                                    douTotalPrice = Convert.ToDouble(TheFindPrivateProjectProductivityDateRangeDataSet.FindPrivateProjectProductivityDateRange[intProductivityCounter].LaborCost);
+                                    douTotalPrice = Math.Round(douTotalPrice, 2);
+                                    NewProductivityRow.TotalLaborCosts = Convert.ToDecimal(douTotalPrice);
 
                                     TheTotalProductivityDataSet.totalproductivity.Rows.Add(NewProductivityRow);
                                 }                                
@@ -118,6 +122,7 @@ namespace EventLogTracker
                         strMessage += "<td><b>Assigned PProject ID</b></td>";
                         strMessage += "<td><b>Project Name</b></td>";
                         strMessage += "<td><b>Total Hours</b></td>";
+                        strMessage += "<td><b>Labor Costs</b></td>";
                         strMessage += "</tr>";
                         strMessage += "<p>               </p>";
 
@@ -128,6 +133,7 @@ namespace EventLogTracker
                             strMessage += "<td>" + TheTotalProductivityDataSet.totalproductivity[intProductivityCounter].AssignedProjectID + "</td>";
                             strMessage += "<td>" + TheTotalProductivityDataSet.totalproductivity[intProductivityCounter].ProjectName + "</td>";
                             strMessage += "<td>" + Convert.ToString(TheTotalProductivityDataSet.totalproductivity[intProductivityCounter].TotalHours) + "</td>";
+                            strMessage += "<td>" + Convert.ToString(TheTotalProductivityDataSet.totalproductivity[intProductivityCounter].TotalLaborCosts) + "</td>";
                             strMessage += "</tr>";
                         }
 

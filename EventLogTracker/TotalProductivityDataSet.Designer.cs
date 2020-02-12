@@ -285,6 +285,8 @@ namespace EventLogTracker {
             
             private global::System.Data.DataColumn columnTotalHours;
             
+            private global::System.Data.DataColumn columnTotalLaborCosts;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public totalproductivityDataTable() {
@@ -344,6 +346,14 @@ namespace EventLogTracker {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn TotalLaborCostsColumn {
+                get {
+                    return this.columnTotalLaborCosts;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -379,12 +389,13 @@ namespace EventLogTracker {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public totalproductivityRow AddtotalproductivityRow(string AssignedProjectID, string ProjectName, decimal TotalHours) {
+            public totalproductivityRow AddtotalproductivityRow(string AssignedProjectID, string ProjectName, decimal TotalHours, decimal TotalLaborCosts) {
                 totalproductivityRow rowtotalproductivityRow = ((totalproductivityRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         AssignedProjectID,
                         ProjectName,
-                        TotalHours};
+                        TotalHours,
+                        TotalLaborCosts};
                 rowtotalproductivityRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowtotalproductivityRow);
                 return rowtotalproductivityRow;
@@ -410,6 +421,7 @@ namespace EventLogTracker {
                 this.columnAssignedProjectID = base.Columns["AssignedProjectID"];
                 this.columnProjectName = base.Columns["ProjectName"];
                 this.columnTotalHours = base.Columns["TotalHours"];
+                this.columnTotalLaborCosts = base.Columns["TotalLaborCosts"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -421,9 +433,12 @@ namespace EventLogTracker {
                 base.Columns.Add(this.columnProjectName);
                 this.columnTotalHours = new global::System.Data.DataColumn("TotalHours", typeof(decimal), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTotalHours);
+                this.columnTotalLaborCosts = new global::System.Data.DataColumn("TotalLaborCosts", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTotalLaborCosts);
                 this.columnAssignedProjectID.AllowDBNull = false;
                 this.columnProjectName.AllowDBNull = false;
                 this.columnTotalHours.AllowDBNull = false;
+                this.columnTotalLaborCosts.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -594,6 +609,17 @@ namespace EventLogTracker {
                 }
                 set {
                     this[this.tabletotalproductivity.TotalHoursColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public decimal TotalLaborCosts {
+                get {
+                    return ((decimal)(this[this.tabletotalproductivity.TotalLaborCostsColumn]));
+                }
+                set {
+                    this[this.tabletotalproductivity.TotalLaborCostsColumn] = value;
                 }
             }
         }
