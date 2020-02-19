@@ -56,6 +56,9 @@
     <Reference Include="EmployeeProjectAssignmentDLL">
       <HintPath>..\..\Blue Jay Class Library\EmployeeProjectAssignmentDLL.dll</HintPath>
     </Reference>
+    <Reference Include="GEOFenceDLL">
+      <HintPath>..\..\Blue Jay Class Library\GEOFenceDLL.dll</HintPath>
+    </Reference>
     <Reference Include="InspectionsDLL">
       <HintPath>..\..\Blue Jay Class Library\InspectionsDLL.dll</HintPath>
     </Reference>

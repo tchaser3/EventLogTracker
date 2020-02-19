@@ -22,6 +22,7 @@ using WeeklyBulkToolInspectionDLL;
 using WeeklyInspectionsDLL;
 using WeeklyVehicleCleanliness;
 using EmployeeProjectAssignmentDLL;
+using GEOFenceDLL;
 
 namespace EventLogTracker
 {
@@ -44,6 +45,7 @@ namespace EventLogTracker
         WeeklyVehicleCleanlinessClass TheWeeklyVehicleCleanlinessClass = new WeeklyVehicleCleanlinessClass();
         WeeklyBulkToolInspectionClass TheWeeklyBulkToolInspectionClass = new WeeklyBulkToolInspectionClass();
         EmployeeProjectAssignmentClass TheEmployeeProjectAssignmentClass = new EmployeeProjectAssignmentClass();
+        GEOFenceClass TheGEOFenceClass = new GEOFenceClass();
 
         //setting up the data
         FindActiveVehicleMainByVehicleNumberDataSet TheFindActiveVehicleMainByVehicleNumberDataSet = new FindActiveVehicleMainByVehicleNumberDataSet();
@@ -69,6 +71,7 @@ namespace EventLogTracker
         FindVehiclesInYardByDateRangeDataSet TheFindVehiclesInYardByDateRangeDataSet = new FindVehiclesInYardByDateRangeDataSet();
         FindProductivityNotCorrectDataSet TheFindProductivityNotCorrectDataSet = new FindProductivityNotCorrectDataSet();
         FindProductivityManagersForEmailDataSet TheFindProductivityManagersForEmailDataSet = new FindProductivityManagersForEmailDataSet();
+        FindGEOFenceNoDriverAssignedDataSet TheFindGEOFenceNoDriverAssignedDataSet = new FindGEOFenceNoDriverAssignedDataSet();
 
         //settup created data set
         AuditReportDataSet TheAuditReportDataSet = new AuditReportDataSet();
@@ -95,10 +98,10 @@ namespace EventLogTracker
                 if (blnFatalError == true)
                     throw new Exception();
 
-                //blnFatalError = RunVehicleExceptionReport(datStartDate);
+                blnFatalError = RunGEOFenceReport();
 
-                //if (blnFatalError == true)
-                    //throw new Exception();
+                if (blnFatalError == true)
+                    throw new Exception();
 
                 //blnFatalError = EmailVehicleExceptionReport();
 
@@ -120,6 +123,88 @@ namespace EventLogTracker
             {
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
+        }
+        private bool RunGEOFenceReport()
+        {
+            bool blnFatalError = false;
+            DateTime datStartDate;
+            DateTime datEndDate;
+            int intCounter;
+            int intNumberOfRecords;
+            string strMessage;
+            string strHeader = "Productivity Sheets Not Correct";
+            int intManagerID;
+            string strManagerName;
+            string strEmailAddress;
+
+
+            try
+            {
+                datStartDate = DateTime.Now;
+                datStartDate = TheDataSearchClass.RemoveTime(datStartDate);
+                datEndDate = TheDataSearchClass.AddingDays(datStartDate, 1);
+
+                TheFindGEOFenceNoDriverAssignedDataSet = TheGEOFenceClass.FindGEOFenceNoDriverAssigned(datStartDate, datEndDate);
+
+                intNumberOfRecords = TheFindGEOFenceNoDriverAssignedDataSet.FindGEOFenceNoDriverAssigned.Rows.Count - 1;
+
+                strMessage = "<h1>Automile No Driver Assigned</h1>";
+                strMessage += "<table>";
+                strMessage += "<tr>";
+                strMessage += "<td><b>Transaction ID</b></td>";
+                strMessage += "<td><b>Date</b></td>";
+                strMessage += "<td><b>Vehicle Number</b></td>";
+                strMessage += "<td><b>First Name</b></td>";
+                strMessage += "<td><b>Last Name</b></td>";
+                strMessage += "<td><b>Assigned Office</b></td>";
+                strMessage += "<td><b>Driver</b></td>";
+                strMessage += "</tr>";
+                strMessage += "<p>               </p>";
+
+                if (intNumberOfRecords > -1)
+                {
+                    for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                    {
+                        //adding items to message
+                        strMessage += "<tr>";
+                        strMessage += "<td>" + Convert.ToString(TheFindGEOFenceNoDriverAssignedDataSet.FindGEOFenceNoDriverAssigned[intCounter].TransactionID) + "</td>";
+                        strMessage += "<td>" + Convert.ToString(TheFindGEOFenceNoDriverAssignedDataSet.FindGEOFenceNoDriverAssigned[intCounter].EventDate) + "</td>";
+                        strMessage += "<td>" + TheFindGEOFenceNoDriverAssignedDataSet.FindGEOFenceNoDriverAssigned[intCounter].VehicleNumber+ "</td>";
+                        strMessage += "<td>" + TheFindGEOFenceNoDriverAssignedDataSet.FindGEOFenceNoDriverAssigned[intCounter].FirstName + "</td>";
+                        strMessage += "<td>" + TheFindGEOFenceNoDriverAssignedDataSet.FindGEOFenceNoDriverAssigned[intCounter].LastName + "</td>";
+                        strMessage += "<td>" + TheFindGEOFenceNoDriverAssignedDataSet.FindGEOFenceNoDriverAssigned[intCounter].AssignedOffice + "</td>";
+                        strMessage += "<td>" + TheFindGEOFenceNoDriverAssignedDataSet.FindGEOFenceNoDriverAssigned[intCounter].Driver + "</td>";
+                        strMessage += "</tr>";
+                    }
+                }
+
+                TheFindProductivityManagersForEmailDataSet = TheEmployeeProjectAssignmentClass.FindProductivityManagersForEmail();
+
+                intNumberOfRecords = TheFindProductivityManagersForEmailDataSet.FindProductivityManagersForEmail.Rows.Count - 1;
+
+                for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                {
+                    strEmailAddress = TheFindProductivityManagersForEmailDataSet.FindProductivityManagersForEmail[intCounter].EmailAddress;
+
+                    blnFatalError = TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage);
+
+                    if (blnFatalError == false)
+                        throw new Exception();
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Automated Vehicle Reprots // Run Productivity Not Correct " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+
+                blnFatalError = true;
+
+            }
+
+
+            return blnFatalError;
         }
         private bool RunProductivityNotCorrect()
         {
