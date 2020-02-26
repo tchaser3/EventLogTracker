@@ -141,7 +141,7 @@ namespace EventLogTracker
                         {
                             strEmailAddress = TheFindDepartmentProductionEmailByDepartmentIDDataSet.FindDepartmentProductionEmailByDepartmentID[intEmployeeCounter].EmailAddress;
 
-                            blnFatalError = !(TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage));
+                            blnFatalError = TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage);
 
                             if (blnFatalError == true)
                                 throw new Exception();

@@ -132,7 +132,7 @@ namespace EventLogTracker
             int intCounter;
             int intNumberOfRecords;
             string strMessage;
-            string strHeader = "Productivity Sheets Not Correct";
+            string strHeader = "Automile No Driver Assigned";
             int intManagerID;
             string strManagerName;
             string strEmailAddress;
@@ -183,19 +183,20 @@ namespace EventLogTracker
                 intNumberOfRecords = TheFindProductivityManagersForEmailDataSet.FindProductivityManagersForEmail.Rows.Count - 1;
 
                 for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+
                 {
                     strEmailAddress = TheFindProductivityManagersForEmailDataSet.FindProductivityManagersForEmail[intCounter].EmailAddress;
 
                     blnFatalError = TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage);
 
-                    if (blnFatalError == false)
+                    if (blnFatalError == true)
                         throw new Exception();
                 }
 
             }
             catch (Exception Ex)
             {
-                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Automated Vehicle Reprots // Run Productivity Not Correct " + Ex.Message);
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Automated Vehicle Reprots // Run GEO Fence Report " + Ex.Message);
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
 
@@ -274,7 +275,7 @@ namespace EventLogTracker
 
                     blnFatalError = TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage);
 
-                    if (blnFatalError == false)
+                    if (blnFatalError == true)
                         throw new Exception();
                 }
 
@@ -369,6 +370,7 @@ namespace EventLogTracker
             string strHeader = "Weekly Inspection No Problem Vs Open Problem Report - Do Not Reply";
             DateTime datStartDate;
             DateTime datEndDate = DateTime.Now;
+            bool blnFatalError = false;
 
             try
             {
@@ -407,7 +409,10 @@ namespace EventLogTracker
 
                 strMessage += "<table>";
 
-                TheSendEmailClass.VehicleReports(strHeader, strMessage);
+                blnFatalError = TheSendEmailClass.VehicleReports(strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
             }
             catch (Exception Ex)
             {
@@ -419,7 +424,6 @@ namespace EventLogTracker
         private bool EmailVehicleExceptionReport()
         {
             bool blnFatalError = false;
-
             int intCounter;
             int intNumberOfRecords;
             string strMessage = "";
@@ -453,7 +457,10 @@ namespace EventLogTracker
 
                 strMessage += "<table>";
 
-                TheSendEmailClass.VehicleReports(strHeader, strMessage);
+                blnFatalError = TheSendEmailClass.VehicleReports(strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
             }
             catch (Exception Ex)
             {
@@ -717,6 +724,7 @@ namespace EventLogTracker
             int intNumberOfRecords;
             string strMessage = "";
             string strHeader = "Manager/Weekly Vehicle Inspection Report - Do Not Reply";
+            bool blnFatalError = false;
 
             try
             {
@@ -760,7 +768,10 @@ namespace EventLogTracker
 
                 strMessage += "<table>";
 
-                TheSendEmailClass.VehicleReports(strHeader, strMessage);
+                blnFatalError = TheSendEmailClass.VehicleReports(strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
             }
             catch (Exception Ex)
             {
@@ -867,7 +878,10 @@ namespace EventLogTracker
 
                 strMessage += "</table>";
 
-                TheSendEmailClass.VehicleReports(strHeader, strMessage);
+                blnFatalError =  TheSendEmailClass.VehicleReports(strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
             }
             catch (Exception Ex)
             {
@@ -889,6 +903,7 @@ namespace EventLogTracker
             DateTime datEndDate = DateTime.Now;
             string strMessage = "<h1>Vehicles In The Yard Over the Last Week</h1>";
             string strHeader = "Vehicles In Yard Weekly Report - Do Not Reply";
+            bool blnFatalError = false;
 
             try
             {
@@ -928,7 +943,10 @@ namespace EventLogTracker
 
                 strMessage += "</table>";
 
-                TheSendEmailClass.VehicleReports(strHeader, strMessage);
+                blnFatalError = TheSendEmailClass.VehicleReports(strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
             }
             catch (Exception Ex)
             {

@@ -40,30 +40,48 @@ namespace EventLogTracker
         VehicleInspectionEmailListDataSet TheVehicleInspectionEmailListDataSet;
         FindSortedAuditEmailListDataSet TheFindSortedAuditEmailListDataSet = new FindSortedAuditEmailListDataSet();
 
-        public void EmailMessage(string strVehicleNumber, string strVehicleProblem)
+        public bool EmailMessage(string strVehicleNumber, string strVehicleProblem)
         {
-            bool blnEmailSent;
+            bool blnFatalError = false;
             string strVehicleFailed;
             int intCounter;
             int intNumberOfRecords;
             string strEmailAddress;
 
-            strVehicleFailed = strVehicleNumber + " Has Failed The Vehicle Inspection and Can Not Be Driven " + strVehicleProblem;
-
-            TheVehicleInspectionEmailListDataSet = TheSafetyClass.GetVehicleInspectionEmailListInfo();
-
-            intNumberOfRecords = TheVehicleInspectionEmailListDataSet.vehicleinspectionemaillist.Rows.Count - 1;
-
-            for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+            try
             {
-                strEmailAddress = TheVehicleInspectionEmailListDataSet.vehicleinspectionemaillist[intCounter].EmailAddress;
+                strVehicleFailed = strVehicleNumber + " Has Failed The Vehicle Inspection and Can Not Be Driven " + strVehicleProblem;
 
-                blnEmailSent = SendEmail(strEmailAddress, "Vehicle Inspection Failure - Do Not Reply", strVehicleFailed);
+                TheVehicleInspectionEmailListDataSet = TheSafetyClass.GetVehicleInspectionEmailListInfo();
+
+                intNumberOfRecords = TheVehicleInspectionEmailListDataSet.vehicleinspectionemaillist.Rows.Count - 1;
+
+                for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                {
+                    strEmailAddress = TheVehicleInspectionEmailListDataSet.vehicleinspectionemaillist[intCounter].EmailAddress;
+
+                    blnFatalError = SendEmail(strEmailAddress, "Vehicle Inspection Failure - Do Not Reply", strVehicleFailed);
+
+                    if (blnFatalError == true)
+                        throw new Exception();
+                }
             }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Send Email Class // Email Message " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+
+                blnFatalError = true;
+            }
+
+            return blnFatalError;
         }
                  
         public bool SendEmail(string mailTo, string subject, string message)
         {
+            bool blnFatalError = false;
+
             try
             {
 
@@ -77,7 +95,6 @@ namespace EventLogTracker
                 smtpClient.EnableSsl = false;
                 smtpClient.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
                 smtpClient.Send(mailMessage);
-                return true;
             }
             catch (Exception Ex)
             {
@@ -85,28 +102,45 @@ namespace EventLogTracker
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
 
-                return false;
+                blnFatalError = true;
             }
 
+            return blnFatalError;
 
         }
-        public void VehicleReports(string strHeader, String strVehicleReport)
+        public bool VehicleReports(string strHeader, String strVehicleReport)
         {
-            bool blnEmailSent;
             int intCounter;
             int intNumberOfRecords;
             string strEmailAddress;
+            bool blnFatalError = false;
 
-            TheVehicleInspectionEmailListDataSet = TheSafetyClass.GetVehicleInspectionEmailListInfo();
-
-            intNumberOfRecords = TheVehicleInspectionEmailListDataSet.vehicleinspectionemaillist.Rows.Count - 1;
-
-            for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+            try
             {
-                strEmailAddress = TheVehicleInspectionEmailListDataSet.vehicleinspectionemaillist[intCounter].EmailAddress;
+                TheVehicleInspectionEmailListDataSet = TheSafetyClass.GetVehicleInspectionEmailListInfo();
 
-                blnEmailSent = SendEmail(strEmailAddress, strHeader, strVehicleReport);
+                intNumberOfRecords = TheVehicleInspectionEmailListDataSet.vehicleinspectionemaillist.Rows.Count - 1;
+
+                for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                {
+                    strEmailAddress = TheVehicleInspectionEmailListDataSet.vehicleinspectionemaillist[intCounter].EmailAddress;
+
+                    blnFatalError = SendEmail(strEmailAddress, strHeader, strVehicleReport);
+
+                    if (blnFatalError == true)
+                        throw new Exception();
+                }
             }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Send Email Class // Vehicle Reports " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+
+                blnFatalError = true;
+            }
+
+            return blnFatalError;            
         }
        
     }
