@@ -104,7 +104,7 @@ namespace EventLogTracker
         {
             //setting variables
             int intNumberOfRecords;
-            bool blnEmailSent;
+            bool blnFatalError = false;
             DateTime datEndDate = DateTime.Now;
             DateTime datStartDate = DateTime.Now;
 
@@ -125,17 +125,18 @@ namespace EventLogTracker
                     gintNumberOfRecords = intNumberOfRecords;
                     intNumberOfRecords -= 1;
 
-                    blnEmailSent = TheSendEmailClass.SendEmail("tholmes@bluejaycommunications.com", "New Event Log Entry", TheFindEventLogByDateRangeDataSet.FindEventLogEntriesByDateRange[0].LogEntry);
+                    blnFatalError = TheSendEmailClass.SendEmail("tholmes@bluejaycommunications.com", "New Event Log Entry", TheFindEventLogByDateRangeDataSet.FindEventLogEntriesByDateRange[0].LogEntry);
 
-                    blnEmailSent = TheSendEmailClass.SendEmail("mharmon@bluejaycommunications.com", "New Event Log Entry", TheFindEventLogByDateRangeDataSet.FindEventLogEntriesByDateRange[0].LogEntry);
+                    if (blnFatalError == true)
+                        throw new Exception();
 
+                    blnFatalError = TheSendEmailClass.SendEmail("mharmon@bluejaycommunications.com", "New Event Log Entry", TheFindEventLogByDateRangeDataSet.FindEventLogEntriesByDateRange[0].LogEntry);
+
+                    if (blnFatalError == true)
+                        throw new Exception();
 
                     dgrResults.ItemsSource = TheFindEventLogByDateRangeDataSet.FindEventLogEntriesByDateRange;
 
-                    if (blnEmailSent == false)
-                    {
-                        TheMessagesClass.ErrorMessage("Email Was Not Sent");
-                    }
                 }
 
                 dgrResults.ItemsSource = TheFindEventLogByDateRangeDataSet.FindEventLogEntriesByDateRange;

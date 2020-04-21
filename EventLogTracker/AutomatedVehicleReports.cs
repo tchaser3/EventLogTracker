@@ -103,10 +103,15 @@ namespace EventLogTracker
                 if (blnFatalError == true)
                     throw new Exception();
 
-                //blnFatalError = EmailVehicleExceptionReport();
+                blnFatalError = RunVehicleExceptionReport(datStartDate);
 
-                //if (blnFatalError == true)
-                   // throw new Exception();
+                if (blnFatalError == true)
+                    throw new Exception();
+
+                blnFatalError = EmailVehicleExceptionReport();
+
+                if (blnFatalError == true)
+                    throw new Exception();
 
                 blnFatalError = RunVehiclesInYardReport(datStartDate);
 
@@ -115,7 +120,7 @@ namespace EventLogTracker
 
                 blnFatalError = RunProductivityNotCorrect();
 
-                if (blnFatalError == false)
+                if (blnFatalError == true)
                     throw new Exception();
 
             }

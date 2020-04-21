@@ -94,6 +94,7 @@ namespace EventLogTracker
                 smtpClient.UseDefaultCredentials = false;
                 smtpClient.EnableSsl = false;
                 smtpClient.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+                
                 smtpClient.Send(mailMessage);
             }
             catch (Exception Ex)
