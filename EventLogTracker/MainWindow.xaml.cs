@@ -288,6 +288,7 @@ namespace EventLogTracker
                     }
                     else
                     {
+                        ChangeVehicleInYardToWarehouse();
                         datTodaysDate = TheDateSearchClass.RemoveTime(datTodaysDate);
                         TheVehicleExceptionEmailDataSet.vehicleexceptionemail[0].TransactionDate = datTransactionDate;
                         TheAutomatedVehicleReportsClass.RunAutomatedReports(datTodaysDate);

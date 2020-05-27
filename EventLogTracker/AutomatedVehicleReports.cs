@@ -552,6 +552,12 @@ namespace EventLogTracker
                                 NewVehicleRow.LastName = strLastName;
                                 NewVehicleRow.VehicleID = intVehicleID;
                                 NewVehicleRow.VehicleNumber = TheFindActiveVehicleMainDataSet.FindActiveVehicleMain[intCounter].VehicleNumber;
+
+                                if(TheFindActiveVehicleMainDataSet.FindActiveVehicleMain[intCounter].LastName == "WAREHOUSE")
+                                {
+                                    strManager = "FLEET MANAGER";
+                                }
+
                                 NewVehicleRow.Manager = strManager;
 
                                 TheVehicleExceptionDataSet.vehicleexception.Rows.Add(NewVehicleRow);
