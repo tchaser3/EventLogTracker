@@ -36,6 +36,8 @@ using VehicleInYardDLL;
 using VehicleAssignmentDLL;
 using VehicleMainDLL;
 using EmployeeProjectAssignmentDLL;
+using EmployeeDateEntryDLL;
+using System.Data;
 
 namespace EventLogTracker
 {
@@ -64,6 +66,7 @@ namespace EventLogTracker
         VehicleMainClass TheVehicleMainClass = new VehicleMainClass();
         EmployeeProjectAssignmentClass TheEmployeeProjectAssignmentClass = new EmployeeProjectAssignmentClass();
         AutomatedProductionReportsClass TheAutomatedProductioinReportsClass = new AutomatedProductionReportsClass();
+        EmployeeDateEntryClass TheEmployeeDataEntryClass = new EmployeeDateEntryClass();
 
         //setting up the time
         DispatcherTimer MyTimer = new DispatcherTimer();
@@ -84,6 +87,7 @@ namespace EventLogTracker
         FindVehiclesInyardShowingVehicleIDDateRangeDataSet TheFindVehiclesInYardShowingVehicleIDDateRangeDataSet = new FindVehiclesInyardShowingVehicleIDDateRangeDataSet();
         FindCurrentAssignedVehicleMainByVehicleIDDataSet TheFindCurrentAssignedVehicleMainByVehicleIDDataSet = new FindCurrentAssignedVehicleMainByVehicleIDDataSet();
         FindProductivityNotCorrectDataSet TheFindProductivityNotCorrectClass = new FindProductivityNotCorrectDataSet();
+        FindERPLoginsDataSet TheFindERPLoginsDataSet = new FindERPLoginsDataSet();
 
         int gintLogCounter;
         int gintLogUpperLimit;
@@ -155,8 +159,7 @@ namespace EventLogTracker
             UpdateVehicleStatus();
             //ChangeVehicleInYardToWarehouse();
             SendVehicleReports();
-            CheckEmployeePayRate();
-            
+            CheckEmployeePayRate();            
         }
         private void ChangeVehicleInYardToWarehouse()
         {
@@ -264,6 +267,8 @@ namespace EventLogTracker
         {
             DateTime datTodaysDate = DateTime.Now;
             DateTime datTransactionDate;
+            DateTime datStartDate;
+            DateTime datEndDate;
 
             try
             {
@@ -273,6 +278,8 @@ namespace EventLogTracker
                 datTransactionDate = TheVehicleExceptionEmailDataSet.vehicleexceptionemail[0].TransactionDate;
 
                 datTransactionDate = TheDateSearchClass.AddingDays(datTransactionDate, 1);
+                datStartDate = TheDateSearchClass.SubtractingDays(datTodaysDate, 1);
+                datStartDate = TheDateSearchClass.RemoveTime(datStartDate);
 
                 if (datTodaysDate > datTransactionDate)
                 {
@@ -290,10 +297,12 @@ namespace EventLogTracker
                     {
                         ChangeVehicleInYardToWarehouse();
                         datTodaysDate = TheDateSearchClass.RemoveTime(datTodaysDate);
+                        datEndDate = TheDateSearchClass.AddingDays(datTodaysDate, 1);
                         TheVehicleExceptionEmailDataSet.vehicleexceptionemail[0].TransactionDate = datTransactionDate;
                         TheAutomatedVehicleReportsClass.RunAutomatedReports(datTodaysDate);
                         TheVehicleExceptionEmailClass.UpdateVehicleExceptionEmailDB(TheVehicleExceptionEmailDataSet);
                         TheUpdatingWorkTaskStatsClass.UpdateWorkTaskStatsTable();
+                        DataEntryReports(datStartDate, datEndDate);
                     }
                 }
 
@@ -318,6 +327,62 @@ namespace EventLogTracker
             catch (Exception Ex)
             {
                 TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Blue Jay ERP // Main Window // Begin The Process " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+        private void DataEntryReports(DateTime datStartDate, DateTime datEndDate)
+        {
+            //setting up the variables
+            int intCounter;
+            int intNumberOfRecords;
+            string strEmailAddress = "itadmin@bluejaycommunications.com";
+            string strHeader = "Employee ERP Logins";
+            string strMessage = "";
+            bool blnFatalError = false;
+
+            try
+            {
+                //loading up the data
+                TheFindERPLoginsDataSet = TheEmployeeDataEntryClass.FindERPLogins(datStartDate, datEndDate);
+
+                intNumberOfRecords = TheFindERPLoginsDataSet.FindERPLogins.Rows.Count - 1;
+
+                strMessage = "<h1>" + strHeader + " - Do Not Reply</h1>";
+                strMessage += "<table>";
+                strMessage += "<tr>";
+                strMessage += "<td>Transaction Date</td>";
+                strMessage += "<td>First Name</td>";
+                strMessage += "<td>Last Name</td>";
+                strMessage += "<td>Home Office</td>";
+                strMessage += "<td>Program Used</td>";
+                strMessage += "</tr>";
+                strMessage += "<p>          </p>";
+
+                if(intNumberOfRecords > -1)
+                {
+                    for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                    {
+                        strMessage += "<tr>";
+                        strMessage += "<td>" + Convert.ToString(TheFindERPLoginsDataSet.FindERPLogins[intCounter].TransactionDate) + "</td>";
+                        strMessage += "<td>" + TheFindERPLoginsDataSet.FindERPLogins[intCounter].FirstName + "</td>";
+                        strMessage += "<td>" + TheFindERPLoginsDataSet.FindERPLogins[intCounter].LastName + "</td>";
+                        strMessage += "<td>" + TheFindERPLoginsDataSet.FindERPLogins[intCounter].HomeOffice + "</td>";
+                        strMessage += "<td>" + TheFindERPLoginsDataSet.FindERPLogins[intCounter].WindowEntered + "</td>";
+                        strMessage += "</tr>";
+                    }
+                }
+
+                strMessage += "</table>";
+
+                blnFatalError = TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Main Window // Data Entry Reports " + Ex.Message);
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }

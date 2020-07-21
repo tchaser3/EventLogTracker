@@ -50,6 +50,9 @@
     <Reference Include="DepartmentDLL">
       <HintPath>..\..\Blue Jay Class Library\DepartmentDLL.dll</HintPath>
     </Reference>
+    <Reference Include="EmployeeDateEntryDLL">
+      <HintPath>..\..\Blue Jay Class Library\EmployeeDateEntryDLL.dll</HintPath>
+    </Reference>
     <Reference Include="EmployeeLaborRateDLL">
       <HintPath>..\..\Blue Jay Class Library\EmployeeLaborRateDLL.dll</HintPath>
     </Reference>
