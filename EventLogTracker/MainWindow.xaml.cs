@@ -157,7 +157,6 @@ namespace EventLogTracker
         {
             UpdateGrid();
             UpdateVehicleStatus();
-            //ChangeVehicleInYardToWarehouse();
             SendVehicleReports();
             CheckEmployeePayRate();            
         }
@@ -301,7 +300,7 @@ namespace EventLogTracker
                         TheVehicleExceptionEmailDataSet.vehicleexceptionemail[0].TransactionDate = datTransactionDate;
                         TheAutomatedVehicleReportsClass.RunAutomatedReports(datTodaysDate);
                         TheVehicleExceptionEmailClass.UpdateVehicleExceptionEmailDB(TheVehicleExceptionEmailDataSet);
-                        TheUpdatingWorkTaskStatsClass.UpdateWorkTaskStatsTable();
+                        //TheUpdatingWorkTaskStatsClass.UpdateWorkTaskStatsTable();
                         DataEntryReports(datStartDate, datEndDate);
                     }
                 }
