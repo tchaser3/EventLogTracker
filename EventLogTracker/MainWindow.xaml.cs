@@ -87,7 +87,7 @@ namespace EventLogTracker
         FindVehiclesInyardShowingVehicleIDDateRangeDataSet TheFindVehiclesInYardShowingVehicleIDDateRangeDataSet = new FindVehiclesInyardShowingVehicleIDDateRangeDataSet();
         FindCurrentAssignedVehicleMainByVehicleIDDataSet TheFindCurrentAssignedVehicleMainByVehicleIDDataSet = new FindCurrentAssignedVehicleMainByVehicleIDDataSet();
         FindProductivityNotCorrectDataSet TheFindProductivityNotCorrectClass = new FindProductivityNotCorrectDataSet();
-        FindERPLoginsDataSet TheFindERPLoginsDataSet = new FindERPLoginsDataSet();
+        FindEmployeeDataEntryByDateRangeDataSet TheFindEmployeeDataEntryByDateRangeDataSet = new FindEmployeeDataEntryByDateRangeDataSet();
 
         int gintLogCounter;
         int gintLogUpperLimit;
@@ -294,7 +294,7 @@ namespace EventLogTracker
                     }
                     else
                     {
-                        ChangeVehicleInYardToWarehouse();
+                        //ChangeVehicleInYardToWarehouse();
                         datTodaysDate = TheDateSearchClass.RemoveTime(datTodaysDate);
                         datEndDate = TheDateSearchClass.AddingDays(datTodaysDate, 1);
                         TheVehicleExceptionEmailDataSet.vehicleexceptionemail[0].TransactionDate = datTransactionDate;
@@ -319,7 +319,7 @@ namespace EventLogTracker
 
                         TheVehicleExceptionEmailClass.UpdateWeeklyVehicleReportsDB(TheWeeklyVehicleReportsDateDataSet);
 
-                        TheAutomatedProductioinReportsClass.RunAutomatedProductionReports();
+                        //TheAutomatedProductioinReportsClass.RunAutomatedProductionReports();
                     }
                 }
             }
@@ -343,9 +343,9 @@ namespace EventLogTracker
             try
             {
                 //loading up the data
-                TheFindERPLoginsDataSet = TheEmployeeDataEntryClass.FindERPLogins(datStartDate, datEndDate);
+                TheFindEmployeeDataEntryByDateRangeDataSet = TheEmployeeDataEntryClass.FindEmployeeDataEntryByDateRange(datStartDate, datEndDate);
 
-                intNumberOfRecords = TheFindERPLoginsDataSet.FindERPLogins.Rows.Count - 1;
+                intNumberOfRecords = TheFindEmployeeDataEntryByDateRangeDataSet.FindEmployeeDateEntryByDateRange.Rows.Count - 1;
 
                 strMessage = "<h1>" + strHeader + " - Do Not Reply</h1>";
                 strMessage += "<table>";
@@ -354,7 +354,7 @@ namespace EventLogTracker
                 strMessage += "<td>First Name</td>";
                 strMessage += "<td>Last Name</td>";
                 strMessage += "<td>Home Office</td>";
-                strMessage += "<td>Program Used</td>";
+                strMessage += "<td>Window Entered</td>";
                 strMessage += "</tr>";
                 strMessage += "<p>          </p>";
 
@@ -363,11 +363,11 @@ namespace EventLogTracker
                     for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
                     {
                         strMessage += "<tr>";
-                        strMessage += "<td>" + Convert.ToString(TheFindERPLoginsDataSet.FindERPLogins[intCounter].TransactionDate) + "</td>";
-                        strMessage += "<td>" + TheFindERPLoginsDataSet.FindERPLogins[intCounter].FirstName + "</td>";
-                        strMessage += "<td>" + TheFindERPLoginsDataSet.FindERPLogins[intCounter].LastName + "</td>";
-                        strMessage += "<td>" + TheFindERPLoginsDataSet.FindERPLogins[intCounter].HomeOffice + "</td>";
-                        strMessage += "<td>" + TheFindERPLoginsDataSet.FindERPLogins[intCounter].WindowEntered + "</td>";
+                        strMessage += "<td>" + Convert.ToString(TheFindEmployeeDataEntryByDateRangeDataSet.FindEmployeeDateEntryByDateRange[intCounter].TransactionDate) + "</td>";
+                        strMessage += "<td>" + TheFindEmployeeDataEntryByDateRangeDataSet.FindEmployeeDateEntryByDateRange[intCounter].FirstName + "</td>";
+                        strMessage += "<td>" + TheFindEmployeeDataEntryByDateRangeDataSet.FindEmployeeDateEntryByDateRange[intCounter].LastName + "</td>";
+                        strMessage += "<td>" + TheFindEmployeeDataEntryByDateRangeDataSet.FindEmployeeDateEntryByDateRange[intCounter].HomeOffice + "</td>";
+                        strMessage += "<td>" + TheFindEmployeeDataEntryByDateRangeDataSet.FindEmployeeDateEntryByDateRange[intCounter].WindowEntered + "</td>";
                         strMessage += "</tr>";
                     }
                 }
