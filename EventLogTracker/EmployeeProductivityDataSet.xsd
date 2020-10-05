@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="EmployeeProductivityDataSet" targetNamespace="http://tempuri.org/EmployeeProductivityDataSet.xsd" xmlns:mstns="http://tempuri.org/EmployeeProductivityDataSet.xsd" xmlns="http://tempuri.org/EmployeeProductivityDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="EmployeeProductivityDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="EmployeeProductivityDataSet" msprop:Generator_UserDSName="EmployeeProductivityDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="employeeproductivity" msprop:Generator_TableClassName="employeeproductivityDataTable" msprop:Generator_TableVarName="tableemployeeproductivity" msprop:Generator_TablePropName="employeeproductivity" msprop:Generator_RowDeletingName="employeeproductivityRowDeleting" msprop:Generator_RowChangingName="employeeproductivityRowChanging" msprop:Generator_RowEvHandlerName="employeeproductivityRowChangeEventHandler" msprop:Generator_RowDeletedName="employeeproductivityRowDeleted" msprop:Generator_UserTableName="employeeproductivity" msprop:Generator_RowChangedName="employeeproductivityRowChanged" msprop:Generator_RowEvArgName="employeeproductivityRowChangeEvent" msprop:Generator_RowClassName="employeeproductivityRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TransactionID" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnTransactionID" msprop:Generator_ColumnPropNameInRow="TransactionID" msprop:Generator_ColumnPropNameInTable="TransactionIDColumn" msprop:Generator_UserColumnName="TransactionID" type="xs:int" />
+              <xs:element name="TransactionDate" msprop:Generator_ColumnVarNameInTable="columnTransactionDate" msprop:Generator_ColumnPropNameInRow="TransactionDate" msprop:Generator_ColumnPropNameInTable="TransactionDateColumn" msprop:Generator_UserColumnName="TransactionDate" type="xs:dateTime" />
+              <xs:element name="EmployeeID" msprop:Generator_ColumnVarNameInTable="columnEmployeeID" msprop:Generator_ColumnPropNameInRow="EmployeeID" msprop:Generator_ColumnPropNameInTable="EmployeeIDColumn" msprop:Generator_UserColumnName="EmployeeID" type="xs:int" />
+              <xs:element name="FirstName" msprop:Generator_ColumnVarNameInTable="columnFirstName" msprop:Generator_ColumnPropNameInRow="FirstName" msprop:Generator_ColumnPropNameInTable="FirstNameColumn" msprop:Generator_UserColumnName="FirstName" type="xs:string" />
+              <xs:element name="LastName" msprop:Generator_ColumnVarNameInTable="columnLastName" msprop:Generator_ColumnPropNameInRow="LastName" msprop:Generator_ColumnPropNameInTable="LastNameColumn" msprop:Generator_UserColumnName="LastName" type="xs:string" />
+              <xs:element name="ProjectID" msprop:Generator_ColumnVarNameInTable="columnProjectID" msprop:Generator_ColumnPropNameInRow="ProjectID" msprop:Generator_ColumnPropNameInTable="ProjectIDColumn" msprop:Generator_UserColumnName="ProjectID" type="xs:int" />
+              <xs:element name="AssignedProjectID" msprop:Generator_ColumnVarNameInTable="columnAssignedProjectID" msprop:Generator_ColumnPropNameInRow="AssignedProjectID" msprop:Generator_ColumnPropNameInTable="AssignedProjectIDColumn" msprop:Generator_UserColumnName="AssignedProjectID" type="xs:string" minOccurs="0" />
+              <xs:element name="ProjectName" msprop:Generator_ColumnVarNameInTable="columnProjectName" msprop:Generator_ColumnPropNameInRow="ProjectName" msprop:Generator_ColumnPropNameInTable="ProjectNameColumn" msprop:Generator_UserColumnName="ProjectName" type="xs:string" />
+              <xs:element name="PayRate" msprop:Generator_ColumnVarNameInTable="columnPayRate" msprop:Generator_ColumnPropNameInRow="PayRate" msprop:Generator_ColumnPropNameInTable="PayRateColumn" msprop:Generator_UserColumnName="PayRate" type="xs:decimal" />
+              <xs:element name="TotalHours" msprop:Generator_ColumnVarNameInTable="columnTotalHours" msprop:Generator_ColumnPropNameInRow="TotalHours" msprop:Generator_ColumnPropNameInTable="TotalHoursColumn" msprop:Generator_UserColumnName="TotalHours" type="xs:decimal" />
+              <xs:element name="TotalCost" msprop:Generator_ColumnVarNameInTable="columnTotalCost" msprop:Generator_ColumnPropNameInRow="TotalCost" msprop:Generator_ColumnPropNameInTable="TotalCostColumn" msprop:Generator_UserColumnName="TotalCost" type="xs:decimal" minOccurs="0" />
+              <xs:element name="CalculatedHours" msprop:Generator_ColumnVarNameInTable="columnCalculatedHours" msprop:Generator_ColumnPropNameInRow="CalculatedHours" msprop:Generator_ColumnPropNameInTable="CalculatedHoursColumn" msprop:Generator_UserColumnName="CalculatedHours" type="xs:decimal" />
+              <xs:element name="Multiplier" msprop:Generator_ColumnVarNameInTable="columnMultiplier" msprop:Generator_ColumnPropNameInRow="Multiplier" msprop:Generator_ColumnPropNameInTable="MultiplierColumn" msprop:Generator_UserColumnName="Multiplier" type="xs:decimal" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:employeeproductivity" />
+      <xs:field xpath="mstns:TransactionID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

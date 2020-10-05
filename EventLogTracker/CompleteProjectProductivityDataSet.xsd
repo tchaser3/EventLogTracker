@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CompleteProjectProductivityDataSet" targetNamespace="http://tempuri.org/CompleteProjectProductivityDataSet.xsd" xmlns:mstns="http://tempuri.org/CompleteProjectProductivityDataSet.xsd" xmlns="http://tempuri.org/CompleteProjectProductivityDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="CompleteProjectProductivityDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="CompleteProjectProductivityDataSet" msprop:Generator_UserDSName="CompleteProjectProductivityDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="completeprojectproductivity" msprop:Generator_TableClassName="completeprojectproductivityDataTable" msprop:Generator_TableVarName="tablecompleteprojectproductivity" msprop:Generator_TablePropName="completeprojectproductivity" msprop:Generator_RowDeletingName="completeprojectproductivityRowDeleting" msprop:Generator_RowChangingName="completeprojectproductivityRowChanging" msprop:Generator_RowEvHandlerName="completeprojectproductivityRowChangeEventHandler" msprop:Generator_RowDeletedName="completeprojectproductivityRowDeleted" msprop:Generator_UserTableName="completeprojectproductivity" msprop:Generator_RowChangedName="completeprojectproductivityRowChanged" msprop:Generator_RowEvArgName="completeprojectproductivityRowChangeEvent" msprop:Generator_RowClassName="completeprojectproductivityRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ProjectID" msprop:Generator_ColumnVarNameInTable="columnProjectID" msprop:Generator_ColumnPropNameInRow="ProjectID" msprop:Generator_ColumnPropNameInTable="ProjectIDColumn" msprop:Generator_UserColumnName="ProjectID" type="xs:int" />
+              <xs:element name="AssignedProjectID" msprop:Generator_ColumnVarNameInTable="columnAssignedProjectID" msprop:Generator_ColumnPropNameInRow="AssignedProjectID" msprop:Generator_ColumnPropNameInTable="AssignedProjectIDColumn" msprop:Generator_UserColumnName="AssignedProjectID" type="xs:string" />
+              <xs:element name="ProjectName" msprop:Generator_ColumnVarNameInTable="columnProjectName" msprop:Generator_ColumnPropNameInRow="ProjectName" msprop:Generator_ColumnPropNameInTable="ProjectNameColumn" msprop:Generator_UserColumnName="ProjectName" type="xs:string" />
+              <xs:element name="TotalHours" msprop:Generator_ColumnVarNameInTable="columnTotalHours" msprop:Generator_ColumnPropNameInRow="TotalHours" msprop:Generator_ColumnPropNameInTable="TotalHoursColumn" msprop:Generator_UserColumnName="TotalHours" type="xs:decimal" />
+              <xs:element name="TotalCosts" msprop:Generator_ColumnVarNameInTable="columnTotalCosts" msprop:Generator_ColumnPropNameInRow="TotalCosts" msprop:Generator_ColumnPropNameInTable="TotalCostsColumn" msprop:Generator_UserColumnName="TotalCosts" type="xs:decimal" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:completeprojectproductivity" />
+      <xs:field xpath="mstns:ProjectID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

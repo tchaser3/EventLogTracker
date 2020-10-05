@@ -14,6 +14,9 @@ using DepartmentDLL;
 using EmployeeProjectAssignmentDLL;
 using DateSearchDLL;
 using ProjectProductivityReportsDLL;
+using DesignProductivityDLL;
+using EmployeeDateEntryDLL.FindEmployeeDataEntryByDateRangeDataSetTableAdapters;
+using Microsoft.Office.Core;
 
 namespace EventLogTracker
 {
@@ -27,29 +30,37 @@ namespace EventLogTracker
         ProjectProductivityReportsClass TheProjectProductivityReportsClass = new ProjectProductivityReportsClass();
         DateSearchClass TheDateSearchClass = new DateSearchClass();
 
-        FindSortedDepartmentDataSet TheFindSortedDepartmentDataSet = new FindSortedDepartmentDataSet();
-        FindDepartmentProductionEmailByDepartmentIDDataSet TheFindDepartmentProductionEmailByDepartmentIDDataSet = new FindDepartmentProductionEmailByDepartmentIDDataSet();
-        FindActiveDepartmentProductionEmailProjectsByDepartmentIDDataSet TheFindActiveDepartmentProductionEmailProjectsByDepartmentIDDataSet = new FindActiveDepartmentProductionEmailProjectsByDepartmentIDDataSet();
-        FindPrivateProjectProductivityDateRangeDataSet TheFindPrivateProjectProductivityDateRangeDataSet = new FindPrivateProjectProductivityDateRangeDataSet();
-        TotalProductivityDataSet TheTotalProductivityDataSet = new TotalProductivityDataSet();
+        FindAllEmployeeProductionOverAWeekDataSet TheFindAllEmployeesProductionOverAWeekDataSet = new FindAllEmployeeProductionOverAWeekDataSet();
+        FindAllDesignEmployeeProductivityOverAWeekDataSet TheFindAllDesignEmployeeProductivityOverAWeekDataSet = new FindAllDesignEmployeeProductivityOverAWeekDataSet();
+        EmployeeProductivityDataSet TheEmployeeProductivityDataSet = new EmployeeProductivityDataSet();
+        CompleteProjectProductivityDataSet TheCompleteProjectProductivityDataSet = new CompleteProjectProductivityDataSet();
+        FindProductivityManagersForEmailDataSet TheFindProductivityManagersForEmailDataSet = new FindProductivityManagersForEmailDataSet();
+
+        //setting global variables
+        int gintProjectCounter;
+        int gintProjectNumberOfRecords;
 
         public void RunAutomatedProductionReports()
         {
-            int intDepartmentCounter;
-            int intDepartmentNumberOfRecords;
+            bool blnFatalError = false;
+            int intCounter;
+            int intNumberOfRecords;
+            int intEmployeeID = -1;
+            decimal decTotalHours = 0;
+            decimal decMultiplier = 1;
+            decimal decTotalCost = 0;
+            decimal decReportedHours;
+            decimal decPayRate;
+            decimal decDifference;
             int intProjectCounter;
-            int intProjectNumberOfRecords;
-            int intProductivityCounter;
-            int intProductivityNumberOfRecords;
-            int intEmployeeCounter;
-            int intEmployeeNumberOfRecords;
-            int intDepartmentID;
+            bool blnItemFound;
+            int intProjectID;
+            bool blnMonday;
+            DateTime datTransactionDate;
             DateTime datStartDate;
             DateTime datEndDate;
-            string strProjectSuffix;
             string strFileName;
             string strPath = "\\\\bjc\\shares\\Documents\\ProductivityReports\\";
-            bool blnFatalError = false;
             string strHeader = "Project Productivity Report";
             string strMessage;
             string strEmailAddress;
@@ -58,96 +69,161 @@ namespace EventLogTracker
             try
             {
                 datEndDate = DateTime.Now;
-                datEndDate = TheDateSearchClass.RemoveTime(datEndDate);
-                datStartDate = TheDateSearchClass.SubtractingDays(datEndDate, 720);
+                datStartDate = TheDateSearchClass.SubtractingDays(datEndDate, 35);
 
-                TheFindSortedDepartmentDataSet = TheDepartMentClass.FindSortedDepartment();
+                TheFindAllEmployeesProductionOverAWeekDataSet = TheEmployeeProjectAssignmentClass.FindAllEmployeeProductionOverAWeek(datStartDate, datEndDate);
 
-                intDepartmentNumberOfRecords = TheFindSortedDepartmentDataSet.FindSortedDepartment.Rows.Count - 1;
+                intNumberOfRecords = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek.Rows.Count - 1;
+                blnMonday = false;
 
-                for(intDepartmentCounter = 0; intDepartmentCounter <= intDepartmentNumberOfRecords; intDepartmentCounter++)
+                for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
                 {
-                    intDepartmentID = TheFindSortedDepartmentDataSet.FindSortedDepartment[intDepartmentCounter].DepartmentID;
-                    strFileName = TheFindSortedDepartmentDataSet.FindSortedDepartment[intDepartmentCounter].Department + " " + Convert.ToString(DateTime.Now.Day + DateTime.Now.Month + DateTime.Now.Year + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".xlsx");
+                    decPayRate = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].PayRate;
+                    decReportedHours = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].TotalHours;
+                    datTransactionDate = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].TransactionDate;
 
-                    TheFindActiveDepartmentProductionEmailProjectsByDepartmentIDDataSet = TheDepartMentClass.FindActiveDepartmentProductionEmailProjectsByDepartmentID(intDepartmentID);
-
-                    intProjectNumberOfRecords = TheFindActiveDepartmentProductionEmailProjectsByDepartmentIDDataSet.FindActiveDepartmentProductionEmailProjectsByDepartmentID.Rows.Count - 1;
-
-                    TheTotalProductivityDataSet.totalproductivity.Rows.Clear();
-
-                    if(intProjectNumberOfRecords > -1)
+                    if ((datTransactionDate.DayOfWeek == DayOfWeek.Monday) && (blnMonday == false))
                     {
-                        for(intProjectCounter = 0; intProjectCounter <= intProjectNumberOfRecords; intProjectCounter++)
+                        decTotalHours = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].TotalHours;
+                        intEmployeeID = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].EmployeeID;
+                        blnMonday = true;
+                        decMultiplier = 1;
+                    }
+                    else if (intEmployeeID != TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].EmployeeID)
+                    {
+                        decTotalHours = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].TotalHours;
+                        intEmployeeID = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].EmployeeID;
+                        decMultiplier = 1;
+                    }
+                    else if (intEmployeeID == TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].EmployeeID)
+                    {
+                        decTotalHours += TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].TotalHours;
+
+                        if (datTransactionDate.DayOfWeek != DayOfWeek.Monday)
                         {
-                            strProjectSuffix = TheFindActiveDepartmentProductionEmailProjectsByDepartmentIDDataSet.FindActiveDepartmentProductionEmailProjectsByDepartmentID[intProjectCounter].ProjectSuffix;
-
-                            TheFindPrivateProjectProductivityDateRangeDataSet = TheProjectProductivityReportsClass.FindPrivateProjectProductivityDateRange(strProjectSuffix, strProjectSuffix, datStartDate, datEndDate);
-
-                            intProductivityNumberOfRecords = TheFindPrivateProjectProductivityDateRangeDataSet.FindPrivateProjectProductivityDateRange.Rows.Count - 1;
-
-                            if(intProductivityNumberOfRecords > -1)
-                            {
-                                for(intProductivityCounter = 0; intProductivityCounter <= intProductivityNumberOfRecords; intProductivityCounter++)
-                                {
-                                    TotalProductivityDataSet.totalproductivityRow NewProductivityRow = TheTotalProductivityDataSet.totalproductivity.NewtotalproductivityRow();
-
-                                    NewProductivityRow.AssignedProjectID = TheFindPrivateProjectProductivityDateRangeDataSet.FindPrivateProjectProductivityDateRange[intProductivityCounter].AssignedProjectID;
-                                    NewProductivityRow.ProjectName = TheFindPrivateProjectProductivityDateRangeDataSet.FindPrivateProjectProductivityDateRange[intProductivityCounter].ProjectName;
-                                    NewProductivityRow.TotalHours = TheFindPrivateProjectProductivityDateRangeDataSet.FindPrivateProjectProductivityDateRange[intProductivityCounter].TotalHours;
-                                    douTotalPrice = Convert.ToDouble(TheFindPrivateProjectProductivityDateRangeDataSet.FindPrivateProjectProductivityDateRange[intProductivityCounter].LaborCost);
-                                    douTotalPrice = Math.Round(douTotalPrice, 2);
-                                    NewProductivityRow.TotalLaborCosts = Convert.ToDecimal(douTotalPrice);
-
-                                    TheTotalProductivityDataSet.totalproductivity.Rows.Add(NewProductivityRow);
-                                }                                
-                            }
-                        }
-
-                        blnFatalError = ExportToExcel(strFileName, strPath);
-
-                        if (blnFatalError == true)
-                            throw new Exception();
-
-                        TheFindDepartmentProductionEmailByDepartmentIDDataSet = TheDepartMentClass.FindDepartmentProductionEmailByDepartmentID(intDepartmentID);
-
-                        intEmployeeNumberOfRecords = TheFindDepartmentProductionEmailByDepartmentIDDataSet.FindDepartmentProductionEmailByDepartmentID.Rows.Count - 1;
-
-                        intProductivityNumberOfRecords = TheTotalProductivityDataSet.totalproductivity.Rows.Count - 1;
-
-                        strMessage = "<h1>Project Productivity Report</h1>";
-                        strMessage += "<h1>An Excel Copy of the Report Can Be Found At " + strPath + "</h1>";
-                        strMessage += "<table>";
-                        strMessage += "<tr>";
-                        strMessage += "<td><b>Assigned PProject ID</b></td>";
-                        strMessage += "<td><b>Project Name</b></td>";
-                        strMessage += "<td><b>Total Hours</b></td>";
-                        strMessage += "<td><b>Labor Costs</b></td>";
-                        strMessage += "</tr>";
-                        strMessage += "<p>               </p>";
-
-                        for(intProductivityCounter = 0; intProductivityCounter <= intProductivityNumberOfRecords; intProductivityCounter++)
-                        {
-                            //adding items to message
-                            strMessage += "<tr>";
-                            strMessage += "<td>" + TheTotalProductivityDataSet.totalproductivity[intProductivityCounter].AssignedProjectID + "</td>";
-                            strMessage += "<td>" + TheTotalProductivityDataSet.totalproductivity[intProductivityCounter].ProjectName + "</td>";
-                            strMessage += "<td>" + Convert.ToString(TheTotalProductivityDataSet.totalproductivity[intProductivityCounter].TotalHours) + "</td>";
-                            strMessage += "<td>" + Convert.ToString(TheTotalProductivityDataSet.totalproductivity[intProductivityCounter].TotalLaborCosts) + "</td>";
-                            strMessage += "</tr>";
-                        }
-
-                        for(intEmployeeCounter = 0; intEmployeeCounter <= intEmployeeNumberOfRecords; intEmployeeCounter++)
-                        {
-                            strEmailAddress = TheFindDepartmentProductionEmailByDepartmentIDDataSet.FindDepartmentProductionEmailByDepartmentID[intEmployeeCounter].EmailAddress;
-
-                            blnFatalError = TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage);
-
-                            if (blnFatalError == true)
-                                throw new Exception();
+                            blnMonday = false;
                         }
                     }
+
+                    if (decMultiplier == 1)
+                    {
+                        if (decTotalHours <= 40)
+                        {
+                            decTotalCost = decPayRate * decReportedHours;
+                        }
+                        if (decTotalHours > 40)
+                        {
+                            decDifference = decTotalHours - 40;
+                            decMultiplier = Convert.ToDecimal(1.5);
+                            decTotalCost = ((decReportedHours - decDifference) * decPayRate) + (decDifference * decPayRate * decMultiplier);
+                        }
+                    }
+                    if (decMultiplier == Convert.ToDecimal(1.5))
+                    {
+                        decTotalCost = decReportedHours * decPayRate * decMultiplier;
+                    }
+
+                    EmployeeProductivityDataSet.employeeproductivityRow NewProductivityRow = TheEmployeeProductivityDataSet.employeeproductivity.NewemployeeproductivityRow();
+
+                    NewProductivityRow.AssignedProjectID = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].AssignedProjectID;
+                    NewProductivityRow.CalculatedHours = decTotalHours;
+                    NewProductivityRow.EmployeeID = intEmployeeID;
+                    NewProductivityRow.FirstName = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].FirstName;
+                    NewProductivityRow.LastName = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].LastName;
+                    NewProductivityRow.Multiplier = decMultiplier;
+                    NewProductivityRow.PayRate = decPayRate;
+                    NewProductivityRow.ProjectID = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].ProjectID;
+                    NewProductivityRow.ProjectName = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].ProjectName;
+                    NewProductivityRow.TotalCost = decTotalCost;
+                    NewProductivityRow.TotalHours = decReportedHours;
+                    NewProductivityRow.TransactionDate = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].TransactionDate;
+
+                    TheEmployeeProductivityDataSet.employeeproductivity.Rows.Add(NewProductivityRow);
                 }
+
+                intNumberOfRecords = TheEmployeeProductivityDataSet.employeeproductivity.Rows.Count - 1;
+                gintProjectCounter = 0;
+                gintProjectNumberOfRecords = 0;
+
+                for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                {
+                    blnItemFound = false;
+                    intProjectID = TheEmployeeProductivityDataSet.employeeproductivity[intCounter].ProjectID;
+                    decTotalHours = TheEmployeeProductivityDataSet.employeeproductivity[intCounter].TotalHours;
+                    decTotalCost = TheEmployeeProductivityDataSet.employeeproductivity[intCounter].TotalCost;
+
+                    if (gintProjectCounter > 0)
+                    {
+                        for (intProjectCounter = 0; intProjectCounter <= gintProjectNumberOfRecords; intProjectCounter++)
+                        {
+                            if (intProjectID == TheCompleteProjectProductivityDataSet.completeprojectproductivity[intProjectCounter].ProjectID)
+                            {
+                                TheCompleteProjectProductivityDataSet.completeprojectproductivity[intProjectCounter].TotalHours += decTotalHours;
+                                TheCompleteProjectProductivityDataSet.completeprojectproductivity[intProjectCounter].TotalCosts += decTotalCost;
+                                blnItemFound = true;
+                            }
+                        }
+                    }
+
+                    if (blnItemFound == false)
+                    {
+                        CompleteProjectProductivityDataSet.completeprojectproductivityRow NewProjectRow = TheCompleteProjectProductivityDataSet.completeprojectproductivity.NewcompleteprojectproductivityRow();
+
+                        NewProjectRow.AssignedProjectID = TheEmployeeProductivityDataSet.employeeproductivity[intCounter].AssignedProjectID;
+                        NewProjectRow.ProjectID = intProjectID;
+                        NewProjectRow.ProjectName = TheEmployeeProductivityDataSet.employeeproductivity[intCounter].ProjectName;
+                        NewProjectRow.TotalCosts = decTotalCost;
+                        NewProjectRow.TotalHours = decTotalHours;
+
+                        TheCompleteProjectProductivityDataSet.completeprojectproductivity.Rows.Add(NewProjectRow);
+                        gintProjectNumberOfRecords = gintProjectCounter;
+                        gintProjectCounter++;
+                    }
+                }
+
+                strMessage = "<h1>Project Productivity Report</h1>";
+                strMessage += "<h1>An Excel Copy of the Report Can Be Found At " + strPath + "</h1>";
+                strMessage += "<table>";
+                strMessage += "<tr>";
+                strMessage += "<td><b>Assigned PProject ID</b></td>";
+                strMessage += "<td><b>Project Name</b></td>";
+                strMessage += "<td><b>Total Hours</b></td>";
+                strMessage += "<td><b>Labor Costs</b></td>";
+                strMessage += "</tr>";
+                strMessage += "<p>               </p>";
+
+
+                intNumberOfRecords = TheCompleteProjectProductivityDataSet.completeprojectproductivity.Rows.Count - 1;
+
+                for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                {
+                    strMessage += "<tr>";
+                    strMessage += "<td><b>" + TheCompleteProjectProductivityDataSet.completeprojectproductivity[intCounter].AssignedProjectID + "</b></td>";
+                    strMessage += "<td><b>" + TheCompleteProjectProductivityDataSet.completeprojectproductivity[intCounter].ProjectName + "</b></td>";
+                    strMessage += "<td><b>" + Convert.ToString(TheCompleteProjectProductivityDataSet.completeprojectproductivity[intCounter].TotalHours) + "</b></td>";
+                    strMessage += "<td><b>" + Convert.ToString(TheCompleteProjectProductivityDataSet.completeprojectproductivity[intCounter].TotalCosts) +  "</b></td>";
+                    strMessage += "</tr>";
+                }
+
+                strMessage += "<table>";
+
+                TheFindProductivityManagersForEmailDataSet = TheEmployeeProjectAssignmentClass.FindProductivityManagersForEmail();
+
+                intNumberOfRecords = TheFindProductivityManagersForEmailDataSet.FindProductivityManagersForEmail.Rows.Count - 1;
+
+                for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                {
+                    strEmailAddress = TheFindProductivityManagersForEmailDataSet.FindProductivityManagersForEmail[intCounter].EmailAddress;
+
+                    blnFatalError = !(TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage));
+
+                    if (blnFatalError == true)
+                        throw new Exception();
+                }
+
+                strFileName = "Productivity Report For " + Convert.ToString(DateTime.Now);
+
+                blnFatalError = ExportToExcel(strFileName, strPath);
 
             }
             catch (Exception Ex)
@@ -180,12 +256,12 @@ namespace EventLogTracker
 
                 int cellRowIndex = 1;
                 int cellColumnIndex = 1;
-                intRowNumberOfRecords = TheTotalProductivityDataSet.totalproductivity.Rows.Count;
-                intColumnNumberOfRecords = TheTotalProductivityDataSet.totalproductivity.Columns.Count;
+                intRowNumberOfRecords = TheCompleteProjectProductivityDataSet.completeprojectproductivity.Rows.Count;
+                intColumnNumberOfRecords = TheCompleteProjectProductivityDataSet.completeprojectproductivity.Columns.Count;
 
                 for (intColumnCounter = 0; intColumnCounter < intColumnNumberOfRecords; intColumnCounter++)
                 {
-                    worksheet.Cells[cellRowIndex, cellColumnIndex] = TheTotalProductivityDataSet.totalproductivity.Columns[intColumnCounter].ColumnName;
+                    worksheet.Cells[cellRowIndex, cellColumnIndex] = TheCompleteProjectProductivityDataSet.completeprojectproductivity.Columns[intColumnCounter].ColumnName;
 
                     cellColumnIndex++;
                 }
@@ -198,7 +274,7 @@ namespace EventLogTracker
                 {
                     for (intColumnCounter = 0; intColumnCounter < intColumnNumberOfRecords; intColumnCounter++)
                     {
-                        worksheet.Cells[cellRowIndex, cellColumnIndex] = TheTotalProductivityDataSet.totalproductivity.Rows[intRowCounter][intColumnCounter].ToString();
+                        worksheet.Cells[cellRowIndex, cellColumnIndex] = TheCompleteProjectProductivityDataSet.completeprojectproductivity.Rows[intRowCounter][intColumnCounter].ToString();
 
                         cellColumnIndex++;
                     }

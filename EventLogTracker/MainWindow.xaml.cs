@@ -89,6 +89,10 @@ namespace EventLogTracker
         FindProductivityNotCorrectDataSet TheFindProductivityNotCorrectClass = new FindProductivityNotCorrectDataSet();
         FindEmployeeDataEntryByDateRangeDataSet TheFindEmployeeDataEntryByDateRangeDataSet = new FindEmployeeDataEntryByDateRangeDataSet();
 
+        FindDuplicateVehicleAssignmentsDataSet aFindDuplicateVehicleAsignmentsDataSet;
+        FindDuplicateVehicleAssignmentsDataSet TheFindDuplicateVehicleAssignmentsDataSet = new FindDuplicateVehicleAssignmentsDataSet();
+        FindDuplicateVehicleAssignmentsDataSetTableAdapters.FindDuplicateVehicleAssignmentsTableAdapter aFindDuplicateVehicleAssignmentsTableAdapter;
+
         int gintLogCounter;
         int gintLogUpperLimit;
         bool gblnItemRan = false;
@@ -104,6 +108,24 @@ namespace EventLogTracker
         {
             TheMessagesClass.CloseTheProgram();
         }
+        private FindDuplicateVehicleAssignmentsDataSet FindDuplicateVehicleAssignments()
+        {
+            try
+            {
+                aFindDuplicateVehicleAsignmentsDataSet = new FindDuplicateVehicleAssignmentsDataSet();
+                aFindDuplicateVehicleAssignmentsTableAdapter = new FindDuplicateVehicleAssignmentsDataSetTableAdapters.FindDuplicateVehicleAssignmentsTableAdapter();
+                aFindDuplicateVehicleAssignmentsTableAdapter.Fill(aFindDuplicateVehicleAsignmentsDataSet.FindDuplicateVehicleAssignments);
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Main Window // Find Duplicate Vehicle Assignments " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+
+
+            return aFindDuplicateVehicleAsignmentsDataSet;
+        }
         private void UpdateGrid()
         {
             //setting variables
@@ -114,6 +136,19 @@ namespace EventLogTracker
 
             try
             {
+                TheFindDuplicateVehicleAssignmentsDataSet = FindDuplicateVehicleAssignments();
+
+                intNumberOfRecords = TheFindDuplicateVehicleAssignmentsDataSet.FindDuplicateVehicleAssignments.Rows.Count;
+
+                if(intNumberOfRecords > 0)
+                {
+                    blnFatalError = TheSendEmailClass.SendEmail("tholmes@bluejaycommunications.com", "New Event Log Entry", "We Have a Duplicate Vehicle Assignment Event");
+                    if (blnFatalError == true)
+                        throw new Exception();
+
+                    TheMessagesClass.ErrorMessage("We Have a Duplicate Vehicle Assignment Event");
+                }
+
                 datEndDate = TheDateSearchClass.RemoveTime(datEndDate);
 
                 datStartDate = TheDateSearchClass.SubtractingDays(datEndDate, 5);
@@ -319,7 +354,7 @@ namespace EventLogTracker
 
                         TheVehicleExceptionEmailClass.UpdateWeeklyVehicleReportsDB(TheWeeklyVehicleReportsDateDataSet);
 
-                        //TheAutomatedProductioinReportsClass.RunAutomatedProductionReports();
+                        TheAutomatedProductioinReportsClass.RunAutomatedProductionReports();
                     }
                 }
             }

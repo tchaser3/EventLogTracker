@@ -50,6 +50,9 @@
     <Reference Include="DepartmentDLL">
       <HintPath>..\..\Blue Jay Class Library\DepartmentDLL.dll</HintPath>
     </Reference>
+    <Reference Include="DesignProductivityDLL">
+      <HintPath>..\..\Blue Jay Class Library\DesignProductivityDLL.dll</HintPath>
+    </Reference>
     <Reference Include="EmployeeDateEntryDLL">
       <HintPath>..\..\Blue Jay Class Library\EmployeeDateEntryDLL.dll</HintPath>
     </Reference>
@@ -150,10 +153,28 @@
     </Compile>
     <Compile Include="AutomatedProductionReportsClass.cs" />
     <Compile Include="AutomatedVehicleReports.cs" />
+    <Compile Include="CompleteProjectProductivityDataSet.cs">
+      <DependentUpon>CompleteProjectProductivityDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CompleteProjectProductivityDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CompleteProjectProductivityDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="DailyVehicleInspectionReportDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DailyVehicleInspectionReportDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeProductivityDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmployeeProductivityDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="FindDuplicateVehicleAssignmentsDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FindDuplicateVehicleAssignmentsDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="SendEmailClass.cs" />
     <Compile Include="TotalProductivityDataSet.Designer.cs">
@@ -215,6 +236,17 @@
     <None Include="AuditReportDataSet.xss">
       <DependentUpon>AuditReportDataSet.xsd</DependentUpon>
     </None>
+    <None Include="CompleteProjectProductivityDataSet.xsc">
+      <DependentUpon>CompleteProjectProductivityDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="CompleteProjectProductivityDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CompleteProjectProductivityDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="CompleteProjectProductivityDataSet.xss">
+      <DependentUpon>CompleteProjectProductivityDataSet.xsd</DependentUpon>
+    </None>
     <None Include="DailyVehicleInspectionReportDataSet.xsc">
       <DependentUpon>DailyVehicleInspectionReportDataSet.xsd</DependentUpon>
     </None>
@@ -225,6 +257,28 @@
     </None>
     <None Include="DailyVehicleInspectionReportDataSet.xss">
       <DependentUpon>DailyVehicleInspectionReportDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="EmployeeProductivityDataSet.xsc">
+      <DependentUpon>EmployeeProductivityDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="EmployeeProductivityDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>EmployeeProductivityDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="EmployeeProductivityDataSet.xss">
+      <DependentUpon>EmployeeProductivityDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="FindDuplicateVehicleAssignmentsDataSet.xsc">
+      <DependentUpon>FindDuplicateVehicleAssignmentsDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="FindDuplicateVehicleAssignmentsDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>FindDuplicateVehicleAssignmentsDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="FindDuplicateVehicleAssignmentsDataSet.xss">
+      <DependentUpon>FindDuplicateVehicleAssignmentsDataSet.xsd</DependentUpon>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
