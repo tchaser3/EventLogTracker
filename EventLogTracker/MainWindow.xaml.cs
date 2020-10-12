@@ -345,17 +345,17 @@ namespace EventLogTracker
                     datTodaysDate = TheDateSearchClass.RemoveTime(datTodaysDate);
 
                      if(datTodaysDate > TheWeeklyVehicleReportsDateDataSet.weeklyvehiclereportsdate[0].LastWeeklyReport)
-                    {
+                     {
                         TheAutomatedVehicleReportsClass.RunWeeklyVehicleInspectionReport();
 
-                        //TheAutomatedVehicleReportsClass.RunWeeklyVehiclesInYardReport();
+                        TheAutomatedVehicleReportsClass.RunWeeklyVehiclesInYardReport();
 
                         TheWeeklyVehicleReportsDateDataSet.weeklyvehiclereportsdate[0].LastWeeklyReport = datTodaysDate;
 
                         TheVehicleExceptionEmailClass.UpdateWeeklyVehicleReportsDB(TheWeeklyVehicleReportsDateDataSet);
 
                         TheAutomatedProductioinReportsClass.RunAutomatedProductionReports();
-                    }
+                     }
                 }
             }
             catch (Exception Ex)

@@ -28,6 +28,7 @@ namespace EventLogTracker
         SendEmailClass TheSendEmailClass = new SendEmailClass();
         EmployeeProjectAssignmentClass TheEmployeeProjectAssignmentClass = new EmployeeProjectAssignmentClass();
         ProjectProductivityReportsClass TheProjectProductivityReportsClass = new ProjectProductivityReportsClass();
+        DesignProductivityClass TheDesignProductivityClass = new DesignProductivityClass();
         DateSearchClass TheDateSearchClass = new DateSearchClass();
 
         FindAllEmployeeProductionOverAWeekDataSet TheFindAllEmployeesProductionOverAWeekDataSet = new FindAllEmployeeProductionOverAWeekDataSet();
@@ -70,11 +71,82 @@ namespace EventLogTracker
             {
                 datEndDate = DateTime.Now;
                 datStartDate = TheDateSearchClass.SubtractingDays(datEndDate, 35);
+                TheEmployeeProductivityDataSet.employeeproductivity.Rows.Clear();
+                TheCompleteProjectProductivityDataSet.completeprojectproductivity.Rows.Clear();
 
                 TheFindAllEmployeesProductionOverAWeekDataSet = TheEmployeeProjectAssignmentClass.FindAllEmployeeProductionOverAWeek(datStartDate, datEndDate);
 
                 intNumberOfRecords = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek.Rows.Count - 1;
                 blnMonday = false;
+
+                for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                {
+                    decPayRate = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].PayRate;
+                    decReportedHours = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].TotalHours;
+                    datTransactionDate = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].TransactionDate;
+
+                    if ((datTransactionDate.DayOfWeek == DayOfWeek.Monday) && (blnMonday == false))
+                    {
+                        decTotalHours = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].TotalHours;
+                        intEmployeeID = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].EmployeeID;
+                        blnMonday = true;
+                        decMultiplier = 1;
+                    }
+                    else if (intEmployeeID != TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].EmployeeID)
+                    {
+                        decTotalHours = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].TotalHours;
+                        intEmployeeID = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].EmployeeID;
+                        decMultiplier = 1;
+                    }
+                    else if (intEmployeeID == TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].EmployeeID)
+                    {
+                        decTotalHours += TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].TotalHours;
+
+                        if (datTransactionDate.DayOfWeek != DayOfWeek.Monday)
+                        {
+                            blnMonday = false;
+                        }
+                    }
+
+                    if (decMultiplier == 1)
+                    {
+                        if (decTotalHours <= 40)
+                        {
+                            decTotalCost = decPayRate * decReportedHours;
+                        }
+                        if (decTotalHours > 40)
+                        {
+                            decDifference = decTotalHours - 40;
+                            decMultiplier = Convert.ToDecimal(1.5);
+                            decTotalCost = ((decReportedHours - decDifference) * decPayRate) + (decDifference * decPayRate * decMultiplier);
+                        }
+                    }
+                    if (decMultiplier == Convert.ToDecimal(1.5))
+                    {
+                        decTotalCost = decReportedHours * decPayRate * decMultiplier;
+                    }
+
+                    EmployeeProductivityDataSet.employeeproductivityRow NewProductivityRow = TheEmployeeProductivityDataSet.employeeproductivity.NewemployeeproductivityRow();
+
+                    NewProductivityRow.AssignedProjectID = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].AssignedProjectID;
+                    NewProductivityRow.CalculatedHours = decTotalHours;
+                    NewProductivityRow.EmployeeID = intEmployeeID;
+                    NewProductivityRow.FirstName = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].FirstName;
+                    NewProductivityRow.LastName = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].LastName;
+                    NewProductivityRow.Multiplier = decMultiplier;
+                    NewProductivityRow.PayRate = decPayRate;
+                    NewProductivityRow.ProjectID = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].ProjectID;
+                    NewProductivityRow.ProjectName = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].ProjectName;
+                    NewProductivityRow.TotalCost = decTotalCost;
+                    NewProductivityRow.TotalHours = decReportedHours;
+                    NewProductivityRow.TransactionDate = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].TransactionDate;
+
+                    TheEmployeeProductivityDataSet.employeeproductivity.Rows.Add(NewProductivityRow);
+                }
+
+                TheFindAllDesignEmployeeProductivityOverAWeekDataSet = TheDesignProductivityClass.FindAllDesignEmployeeProductivityOverAWeek(datStartDate, datEndDate);
+
+                intNumberOfRecords = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek.Rows.Count - 1;
 
                 for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
                 {
@@ -125,18 +197,18 @@ namespace EventLogTracker
 
                     EmployeeProductivityDataSet.employeeproductivityRow NewProductivityRow = TheEmployeeProductivityDataSet.employeeproductivity.NewemployeeproductivityRow();
 
-                    NewProductivityRow.AssignedProjectID = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].AssignedProjectID;
+                    NewProductivityRow.AssignedProjectID = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].AssignedProjectID;
                     NewProductivityRow.CalculatedHours = decTotalHours;
                     NewProductivityRow.EmployeeID = intEmployeeID;
-                    NewProductivityRow.FirstName = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].FirstName;
-                    NewProductivityRow.LastName = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].LastName;
+                    NewProductivityRow.FirstName = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].FirstName;
+                    NewProductivityRow.LastName = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].LastName;
                     NewProductivityRow.Multiplier = decMultiplier;
                     NewProductivityRow.PayRate = decPayRate;
-                    NewProductivityRow.ProjectID = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].ProjectID;
-                    NewProductivityRow.ProjectName = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].ProjectName;
+                    NewProductivityRow.ProjectID = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].ProjectID;
+                    NewProductivityRow.ProjectName = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].ProjectName;
                     NewProductivityRow.TotalCost = decTotalCost;
                     NewProductivityRow.TotalHours = decReportedHours;
-                    NewProductivityRow.TransactionDate = TheFindAllDesignEmployeeProductivityOverAWeekDataSet.FindAllDesignEmployeeProductivityOverAWeek[intCounter].TransactionDate;
+                    NewProductivityRow.TransactionDate = TheFindAllEmployeesProductionOverAWeekDataSet.FindAllEmployeeProductionOverAWeek[intCounter].TransactionDate;
 
                     TheEmployeeProductivityDataSet.employeeproductivity.Rows.Add(NewProductivityRow);
                 }
@@ -215,13 +287,13 @@ namespace EventLogTracker
                 {
                     strEmailAddress = TheFindProductivityManagersForEmailDataSet.FindProductivityManagersForEmail[intCounter].EmailAddress;
 
-                    blnFatalError = !(TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage));
+                    blnFatalError = (TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage));
 
                     if (blnFatalError == true)
                         throw new Exception();
                 }
 
-                strFileName = "Productivity Report For " + Convert.ToString(DateTime.Now);
+                strFileName = "Productivity Report For " + Convert.ToString(datEndDate.Month) + "-" + Convert.ToString(datEndDate.Day) + "-" + Convert.ToString(datEndDate.Year);
 
                 blnFatalError = ExportToExcel(strFileName, strPath);
 
@@ -283,7 +355,7 @@ namespace EventLogTracker
                 }
 
                 //Getting the location and file name of the excel to save from user. 
-                workbook.SaveAs(strPath + strFileName);
+                workbook.SaveAs(strPath + strFileName + ".xlsx");
 
             }
             catch (System.Exception ex)
