@@ -279,19 +279,14 @@ namespace EventLogTracker
 
                 strMessage += "<table>";
 
-                TheFindProductivityManagersForEmailDataSet = TheEmployeeProjectAssignmentClass.FindProductivityManagersForEmail();
+                strEmailAddress = "ERPProjectReports@bluejaycommunications.com";
+
+                blnFatalError = (TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage));
+
+                if (blnFatalError == true)
+                    throw new Exception();
 
                 intNumberOfRecords = TheFindProductivityManagersForEmailDataSet.FindProductivityManagersForEmail.Rows.Count - 1;
-
-                for(intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
-                {
-                    strEmailAddress = TheFindProductivityManagersForEmailDataSet.FindProductivityManagersForEmail[intCounter].EmailAddress;
-
-                    blnFatalError = (TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage));
-
-                    if (blnFatalError == true)
-                        throw new Exception();
-                }
 
                 strFileName = "Productivity Report For " + Convert.ToString(datEndDate.Month) + "-" + Convert.ToString(datEndDate.Day) + "-" + Convert.ToString(datEndDate.Year);
 

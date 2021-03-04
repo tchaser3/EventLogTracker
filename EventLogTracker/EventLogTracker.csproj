@@ -80,6 +80,12 @@
     <Reference Include="NewVehicleDLL">
       <HintPath>..\..\Blue Jay Class Library\NewVehicleDLL.dll</HintPath>
     </Reference>
+    <Reference Include="ProductionProjectDLL">
+      <HintPath>..\..\Blue Jay Class Library\ProductionProjectDLL.dll</HintPath>
+    </Reference>
+    <Reference Include="ProjectMatrixDLL">
+      <HintPath>..\..\Blue Jay Class Library\ProjectMatrixDLL.dll</HintPath>
+    </Reference>
     <Reference Include="ProjectProductivityReportsDLL">
       <HintPath>..\..\Blue Jay Class Library\ProjectProductivityReportsDLL.dll</HintPath>
     </Reference>

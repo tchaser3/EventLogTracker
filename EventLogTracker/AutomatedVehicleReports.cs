@@ -98,11 +98,6 @@ namespace EventLogTracker
                 if (blnFatalError == true)
                     throw new Exception();
 
-                blnFatalError = RunGEOFenceReport();
-
-                if (blnFatalError == true)
-                    throw new Exception();
-
                 blnFatalError = RunVehicleExceptionReport(datStartDate);
 
                 if (blnFatalError == true)
@@ -118,10 +113,10 @@ namespace EventLogTracker
                 if (blnFatalError == true)
                     throw new Exception();
 
-                blnFatalError = RunProductivityNotCorrect();
+                //blnFatalError = RunProductivityNotCorrect();
 
-                if (blnFatalError == true)
-                    throw new Exception();
+                //if (blnFatalError == true)
+                    //throw new Exception();
 
             }
             catch(Exception Ex)

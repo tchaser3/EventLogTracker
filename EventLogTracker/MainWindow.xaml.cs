@@ -37,7 +37,10 @@ using VehicleAssignmentDLL;
 using VehicleMainDLL;
 using EmployeeProjectAssignmentDLL;
 using EmployeeDateEntryDLL;
+using ProjectMatrixDLL;
 using System.Data;
+using ProductionProjectDLL;
+using GEOFenceDLL;
 
 namespace EventLogTracker
 {
@@ -67,6 +70,9 @@ namespace EventLogTracker
         EmployeeProjectAssignmentClass TheEmployeeProjectAssignmentClass = new EmployeeProjectAssignmentClass();
         AutomatedProductionReportsClass TheAutomatedProductioinReportsClass = new AutomatedProductionReportsClass();
         EmployeeDateEntryClass TheEmployeeDataEntryClass = new EmployeeDateEntryClass();
+        ProjectMatrixClass TheProjectMatrixClass = new ProjectMatrixClass();
+        ProductionProjectClass TheProductionProjectClass = new ProductionProjectClass();
+        GEOFenceClass TheGeoFenceClass = new GEOFenceClass();
 
         //setting up the time
         DispatcherTimer MyTimer = new DispatcherTimer();
@@ -88,6 +94,11 @@ namespace EventLogTracker
         FindCurrentAssignedVehicleMainByVehicleIDDataSet TheFindCurrentAssignedVehicleMainByVehicleIDDataSet = new FindCurrentAssignedVehicleMainByVehicleIDDataSet();
         FindProductivityNotCorrectDataSet TheFindProductivityNotCorrectClass = new FindProductivityNotCorrectDataSet();
         FindEmployeeDataEntryByDateRangeDataSet TheFindEmployeeDataEntryByDateRangeDataSet = new FindEmployeeDataEntryByDateRangeDataSet();
+        FindDuplicateProjectMatrixDataSet TheFindDuplicateProjectMatrixDataSet = new FindDuplicateProjectMatrixDataSet();
+        FindProjectMatrixByCustomerAssignedIDForEmailDataSet TheFindProjectMatrixByCustomerAssignedIDForEmailDataSet = new FindProjectMatrixByCustomerAssignedIDForEmailDataSet();
+        FindOverdueOpenProductionProjectsDataSet TheFindOverDueProductionProjectsDataSet = new FindOverdueOpenProductionProjectsDataSet();
+        FindEmployeeByEmployeeIDDataSet TheFindEmployeeByEmployeeIDDataSet = new FindEmployeeByEmployeeIDDataSet();
+        FindGEOFenceTransactionDateRangeDataSet TheFindGeoFenceTransactionDateRangeDataSet = new FindGEOFenceTransactionDateRangeDataSet();
 
         FindDuplicateVehicleAssignmentsDataSet aFindDuplicateVehicleAsignmentsDataSet;
         FindDuplicateVehicleAssignmentsDataSet TheFindDuplicateVehicleAssignmentsDataSet = new FindDuplicateVehicleAssignmentsDataSet();
@@ -149,6 +160,18 @@ namespace EventLogTracker
                     TheMessagesClass.ErrorMessage("We Have a Duplicate Vehicle Assignment Event");
                 }
 
+                TheFindDuplicateProjectMatrixDataSet = TheProjectMatrixClass.FindDuplicateProjectMatrix();
+
+                intNumberOfRecords = TheFindDuplicateProjectMatrixDataSet.FindDuplicateProjectMatrix.Rows.Count;
+
+                if(intNumberOfRecords > 0)
+                {
+                    blnFatalError = CreateDuplicateProjectEmail();
+
+                    if (blnFatalError == true)
+                        throw new Exception();
+                }
+
                 datEndDate = TheDateSearchClass.RemoveTime(datEndDate);
 
                 datStartDate = TheDateSearchClass.SubtractingDays(datEndDate, 5);
@@ -187,6 +210,97 @@ namespace EventLogTracker
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }           
             
+        }
+        private bool CreateDuplicateProjectEmail()
+        {
+            int intNumberOfRecords;
+            int intCounter;
+            string strHeader = "DUPLICATE PROJECTS";
+            string strMessage;
+            bool blnFatalError = false;
+            int intSecondCounter;
+            int intSecondNumberOfRecords;
+            string strCustomerID;
+            string strEmailAddress = "";
+            string strEmployeeName;
+
+            try
+            {
+                //loading up the data
+                intNumberOfRecords = TheFindDuplicateProjectMatrixDataSet.FindDuplicateProjectMatrix.Rows.Count - 1;
+
+                strMessage = "<h1>" + strHeader + " - Do Not Reply</h1>";
+                strMessage += "<table>";
+                strMessage += "<tr>";
+                strMessage += "<td>TransactionID</td>";
+                strMessage += "<td>Transaction Date</td>";
+                strMessage += "<td>Our Project ID</td>";
+                strMessage += "<td>Custoner Project ID</td>";
+                strMessage += "<td>Project Name</td>";
+                strMessage += "<td>Employee Name</td>";
+                strMessage += "</tr>";
+                strMessage += "<p>          </p>";
+
+                if (intNumberOfRecords > -1)
+                {
+                    for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
+                    {
+                        strCustomerID = TheFindDuplicateProjectMatrixDataSet.FindDuplicateProjectMatrix[intCounter].CustomerAssignedID;
+
+                        TheFindProjectMatrixByCustomerAssignedIDForEmailDataSet = TheProjectMatrixClass.FindProjectMatrixByCustomerAssignedIDForEmail(strCustomerID);
+
+                        intSecondNumberOfRecords = TheFindProjectMatrixByCustomerAssignedIDForEmailDataSet.FindProjectMatrixByCustomerAssignedIDForEmail.Rows.Count;
+
+                        if(intSecondNumberOfRecords > 0)
+                        {
+                            for(intSecondCounter = 0; intSecondCounter < intSecondNumberOfRecords; intSecondCounter++)
+                            {
+                                strEmployeeName = TheFindProjectMatrixByCustomerAssignedIDForEmailDataSet.FindProjectMatrixByCustomerAssignedIDForEmail[intSecondCounter].FirstName + " ";
+                                strEmployeeName += TheFindProjectMatrixByCustomerAssignedIDForEmailDataSet.FindProjectMatrixByCustomerAssignedIDForEmail[intSecondCounter].LastName;
+
+                                strMessage += "<tr>";
+                                strMessage += "<td>" + Convert.ToString(TheFindProjectMatrixByCustomerAssignedIDForEmailDataSet.FindProjectMatrixByCustomerAssignedIDForEmail[intSecondCounter].TransactionID) + "</td>";
+                                strMessage += "<td>" + Convert.ToString(TheFindProjectMatrixByCustomerAssignedIDForEmailDataSet.FindProjectMatrixByCustomerAssignedIDForEmail[intSecondCounter].TransactionDate) + "</td>";
+                                strMessage += "<td>" + TheFindProjectMatrixByCustomerAssignedIDForEmailDataSet.FindProjectMatrixByCustomerAssignedIDForEmail[intSecondCounter].AssignedProjectID + "</td>";
+                                strMessage += "<td>" + TheFindProjectMatrixByCustomerAssignedIDForEmailDataSet.FindProjectMatrixByCustomerAssignedIDForEmail[intSecondCounter].CustomerAssignedID + "</td>";
+                                strMessage += "<td>" + TheFindProjectMatrixByCustomerAssignedIDForEmailDataSet.FindProjectMatrixByCustomerAssignedIDForEmail[intSecondCounter].ProjectName + "</td>";
+                                strMessage += "<td>" + strEmployeeName + "</td>";
+                                strMessage += "</tr>";
+                            }
+                        }                        
+                    }
+                }
+
+                strMessage += "</table>";
+
+                blnFatalError = TheSendEmailClass.SendEmail("tholmes@bluejaycommunications.com", strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+
+                blnFatalError = TheSendEmailClass.SendEmail("mharmon@bluejaycommunications.com", strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+
+                blnFatalError = TheSendEmailClass.SendEmail("csimmons@bluejaycommunications.com", strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+
+                blnFatalError = TheSendEmailClass.SendEmail("mchapman@bluejaycommunications.com", strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Main Window // Data Entry Reports " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());                
+            }
+
+            return blnFatalError;
         }
         private void BeginTheProcess(object sender, EventArgs e)
         {
@@ -329,14 +443,16 @@ namespace EventLogTracker
                     }
                     else
                     {
-                        //ChangeVehicleInYardToWarehouse();
+                        ChangeVehicleInYardToWarehouse();
                         datTodaysDate = TheDateSearchClass.RemoveTime(datTodaysDate);
                         datEndDate = TheDateSearchClass.AddingDays(datTodaysDate, 1);
                         TheVehicleExceptionEmailDataSet.vehicleexceptionemail[0].TransactionDate = datTransactionDate;
                         TheAutomatedVehicleReportsClass.RunAutomatedReports(datTodaysDate);
                         TheVehicleExceptionEmailClass.UpdateVehicleExceptionEmailDB(TheVehicleExceptionEmailDataSet);
-                        //TheUpdatingWorkTaskStatsClass.UpdateWorkTaskStatsTable();
+                        TheUpdatingWorkTaskStatsClass.UpdateWorkTaskStatsTable();
                         DataEntryReports(datStartDate, datEndDate);
+                        SendOverdueProjectReport();
+                        //SendVehicleAfterHourActivity();
                     }
                 }
 
@@ -364,6 +480,177 @@ namespace EventLogTracker
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
+        }
+        private void SendVehicleAfterHourActivity()
+        {
+            int intCounter;
+            int intNumberOfRecords;
+            string strEmailAddress = "itadmin@bluejaycommunications.com";
+            DateTime datStartDate = DateTime.Now;
+            DateTime datEndDate = DateTime.Now;
+            string strEventDate = "";
+            string strVehicleNumber;
+            string strEmployee;
+            string strAssignedOffice;
+            string strDriver;
+            bool blnInSide;
+            string strInOut = "";
+            string strHeader = "BJC Vehicle After Hour Report";
+            string strMessage;
+            bool blnFatalError;
+
+            try
+            {
+                datStartDate = TheDateSearchClass.RemoveTime(datStartDate);
+                datEndDate = TheDateSearchClass.RemoveTime(datEndDate);
+                datStartDate = TheDateSearchClass.SubtractingDays(datStartDate, 1);
+                datStartDate = datStartDate.AddHours(18);
+                datEndDate = datEndDate.AddHours(6);
+
+                TheFindGeoFenceTransactionDateRangeDataSet = TheGeoFenceClass.FindGEOFenceTransactionDAteRanage(datStartDate, datEndDate);
+
+                strMessage = "<h1>" + strHeader + " - Do Not Reply</h1>";
+                strMessage += "<table>";
+                strMessage += "<tr>";
+                strMessage += "<td>Event Date</td>";
+                strMessage += "<td>Vehicle Number</td>";
+                strMessage += "<td>Employee</td>";
+                strMessage += "<td>Office</td>";
+                strMessage += "<td>Driver</td>";
+                strMessage += "<td>In Or Out</td>";
+                strMessage += "</tr>";
+                strMessage += "<p>          </p>";
+
+                intNumberOfRecords = TheFindGeoFenceTransactionDateRangeDataSet.FindGEOFenceTransasctionDateRange.Rows.Count;
+
+                if (intNumberOfRecords > 0)
+                {
+                    for (intCounter = 0; intCounter < intNumberOfRecords; intCounter++)
+                    {
+                        strEventDate = Convert.ToString(TheFindGeoFenceTransactionDateRangeDataSet.FindGEOFenceTransasctionDateRange[intCounter].EventDate);
+                        strVehicleNumber = TheFindGeoFenceTransactionDateRangeDataSet.FindGEOFenceTransasctionDateRange[intCounter].VehicleNumber;
+                        strEmployee = TheFindGeoFenceTransactionDateRangeDataSet.FindGEOFenceTransasctionDateRange[intCounter].FirstName + " ";
+                        strEmployee += TheFindGeoFenceTransactionDateRangeDataSet.FindGEOFenceTransasctionDateRange[intCounter].LastName;
+                        strAssignedOffice = TheFindGeoFenceTransactionDateRangeDataSet.FindGEOFenceTransasctionDateRange[intCounter].AssignedOffice;
+                        strDriver = TheFindGeoFenceTransactionDateRangeDataSet.FindGEOFenceTransasctionDateRange[intCounter].Driver;
+                        blnInSide = TheFindGeoFenceTransactionDateRangeDataSet.FindGEOFenceTransasctionDateRange[intCounter].InSide;
+
+                        if (blnInSide == true)
+                            strInOut = "IN";
+                        else if (blnInSide == false)
+                            strInOut = "OUT";
+
+                        strMessage += "<tr>";
+                        strMessage += "<td>" + strEventDate + "</td>";
+                        strMessage += "<td>" + strVehicleNumber + "</td>";
+                        strMessage += "<td>" + strEmployee + "</td>";
+                        strMessage += "<td>" + strAssignedOffice + "</td>";
+                        strMessage += "<td>" + strDriver+ "</td>";
+                        strMessage += "<td>" + strInOut + "</td>";
+                        strMessage += "</tr>";
+                    }
+                }
+
+                strMessage += "</table>";
+
+                blnFatalError = TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Send Overdue Project Report " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+        private void SendOverdueProjectReport()
+        {
+            int intCounter;
+            int intNumberOfRecords;
+            string strEmailAddress = "erpprojectreports@bluejaycommunications.com";
+            DateTime datTransactionDate = DateTime.Now;
+            string strCustomer;
+            string strCustomerAssignedID;
+            string strAssignedProjectID;
+            string strProjectName;
+            string strDateReceived;
+            string strECDDate;
+            string strAssignedOffice;
+            string strStatus;
+            int intWarehouseID;
+            string strHeader = "BJC Overdue Projects Report";
+            string strMessage;
+            bool blnFatalError;
+
+            try
+            {
+                datTransactionDate = TheDateSearchClass.AddingDays(datTransactionDate, 3);
+
+                TheFindOverDueProductionProjectsDataSet = TheProductionProjectClass.FindOverdueProductionProjects(datTransactionDate);
+
+                strMessage = "<h1>" + strHeader + " - Do Not Reply</h1>";
+                strMessage += "<table>";
+                strMessage += "<tr>";
+                strMessage += "<td>Customer</td>";
+                strMessage += "<td>Custoner Project ID</td>";
+                strMessage += "<td>BJC Project ID</td>";
+                strMessage += "<td>Project Name</td>";
+                strMessage += "<td>Date Received</td>";
+                strMessage += "<td>ECD Date</td>";
+                strMessage += "<td>Assigned Office</td>";
+                strMessage += "<td>Status</td>";
+                strMessage += "</tr>";
+                strMessage += "<p>          </p>";
+
+                intNumberOfRecords = TheFindOverDueProductionProjectsDataSet.FindOverdueOpenProductionProjects.Rows.Count;
+
+                if(intNumberOfRecords > 0)
+                {
+                    for(intCounter = 0; intCounter < intNumberOfRecords; intCounter++)
+                    {
+                        strCustomer = TheFindOverDueProductionProjectsDataSet.FindOverdueOpenProductionProjects[intCounter].Customer;
+                        strCustomerAssignedID = TheFindOverDueProductionProjectsDataSet.FindOverdueOpenProductionProjects[intCounter].CustomerAssignedID;
+                        strAssignedProjectID = TheFindOverDueProductionProjectsDataSet.FindOverdueOpenProductionProjects[intCounter].AssignedProjectID;
+                        strProjectName = TheFindOverDueProductionProjectsDataSet.FindOverdueOpenProductionProjects[intCounter].ProjectName;
+                        strDateReceived = Convert.ToString(TheFindOverDueProductionProjectsDataSet.FindOverdueOpenProductionProjects[intCounter].DateReceived);
+                        strECDDate = Convert.ToString(TheFindOverDueProductionProjectsDataSet.FindOverdueOpenProductionProjects[intCounter].ECDDate);
+                        strStatus = TheFindOverDueProductionProjectsDataSet.FindOverdueOpenProductionProjects[intCounter].WorkOrderStatus;
+
+                        intWarehouseID = TheFindOverDueProductionProjectsDataSet.FindOverdueOpenProductionProjects[intCounter].AssignedOfficeID;
+
+                        TheFindEmployeeByEmployeeIDDataSet = TheEmployeeClass.FindEmployeeByEmployeeID(intWarehouseID);
+
+                        strAssignedOffice = TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].FirstName;
+
+                        strMessage += "<tr>";
+                        strMessage += "<td>" + strCustomer + "</td>";
+                        strMessage += "<td>" + strCustomerAssignedID + "</td>";
+                        strMessage += "<td>" + strAssignedProjectID + "</td>";
+                        strMessage += "<td>" + strProjectName + "</td>";
+                        strMessage += "<td>" + strDateReceived + "</td>";
+                        strMessage += "<td>" + strECDDate + "</td>";
+                        strMessage += "<td>" + strAssignedOffice + "</td>";
+                        strMessage += "<td>" + strStatus + "</td>";
+                        strMessage += "</tr>";
+                    }
+                }
+
+                strMessage += "</table>";
+
+                blnFatalError = TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Send Overdue Project Report " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+
         }
         private void DataEntryReports(DateTime datStartDate, DateTime datEndDate)
         {

@@ -49,11 +49,11 @@
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                 <GradientStop Color="AliceBlue" Offset="0"/>
-                <GradientStop Color="RoyalBlue" Offset="1"/>
+                <GradientStop Color="LightBlue" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
         <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" Margin="748,202,0,0" VerticalAlignment="Top" Width="125" Height="55" FontSize="18" Click="btnClose_Click"/>
-        <DataGrid x:Name="dgrResults" HorizontalAlignment="Left" Height="252" Margin="21,148,0,0" VerticalAlignment="Top" Width="707"/>
+        <DataGrid x:Name="dgrResults" HorizontalAlignment="Left" Height="252" Margin="21,148,0,0" VerticalAlignment="Top" Width="707" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AlternationCount="1" RowBackground="AliceBlue" AlternatingRowBackground="LightBlue"/>
         <Image HorizontalAlignment="Left" Height="81" Margin="360,10,0,0" VerticalAlignment="Top" Width="171" Source="logo.png" Stretch="Fill"/>
         <Label x:Name="lblTitle" Content="Event Log Tracker" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Margin="10,101,0,0" VerticalAlignment="Top" Width="872"/>
 
