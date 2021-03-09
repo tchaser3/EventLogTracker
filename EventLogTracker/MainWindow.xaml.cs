@@ -454,6 +454,11 @@ namespace EventLogTracker
                         DataEntryReports(datStartDate, datEndDate);
                         SendOverdueProjectReport();
                         //SendVehicleAfterHourActivity();
+
+                        if (datTodaysDate.DayOfWeek == DayOfWeek.Tuesday)
+                        {
+                            TheRunPunchedVSProductionClass.RunPunchedVSProductionReport();
+                        }
                     }
                 }
 
@@ -473,13 +478,11 @@ namespace EventLogTracker
 
                         TheAutomatedProductioinReportsClass.RunAutomatedProductionReports();
 
-                        if (datTodaysDate.DayOfWeek == DayOfWeek.Tuesday)
-                        {
-                            TheRunPunchedVSProductionClass.RunPunchedVSProductionReport();
-                        }
+                        
                     }
                 }
                 
+
             }
             catch (Exception Ex)
             {
