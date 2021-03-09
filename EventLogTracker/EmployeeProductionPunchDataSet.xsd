@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="EmployeeProductionPunchDataSet" targetNamespace="http://tempuri.org/EmployeeProductionPunchDataSet.xsd" xmlns:mstns="http://tempuri.org/EmployeeProductionPunchDataSet.xsd" xmlns="http://tempuri.org/EmployeeProductionPunchDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="EmployeeProductionPunchDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="EmployeeProductionPunchDataSet" msprop:Generator_UserDSName="EmployeeProductionPunchDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="employees" msprop:Generator_TableClassName="employeesDataTable" msprop:Generator_TableVarName="tableemployees" msprop:Generator_TablePropName="employees" msprop:Generator_RowDeletingName="employeesRowDeleting" msprop:Generator_RowChangingName="employeesRowChanging" msprop:Generator_RowEvHandlerName="employeesRowChangeEventHandler" msprop:Generator_RowDeletedName="employeesRowDeleted" msprop:Generator_UserTableName="employees" msprop:Generator_RowChangedName="employeesRowChanged" msprop:Generator_RowEvArgName="employeesRowChangeEvent" msprop:Generator_RowClassName="employeesRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="FirstName" msprop:Generator_ColumnVarNameInTable="columnFirstName" msprop:Generator_ColumnPropNameInRow="FirstName" msprop:Generator_ColumnPropNameInTable="FirstNameColumn" msprop:Generator_UserColumnName="FirstName" type="xs:string" />
+              <xs:element name="LastName" msprop:Generator_ColumnVarNameInTable="columnLastName" msprop:Generator_ColumnPropNameInRow="LastName" msprop:Generator_ColumnPropNameInTable="LastNameColumn" msprop:Generator_UserColumnName="LastName" type="xs:string" />
+              <xs:element name="HomeOffice" msprop:Generator_ColumnVarNameInTable="columnHomeOffice" msprop:Generator_ColumnPropNameInRow="HomeOffice" msprop:Generator_ColumnPropNameInTable="HomeOfficeColumn" msprop:Generator_UserColumnName="HomeOffice" type="xs:string" />
+              <xs:element name="ManagerFirstName" msprop:Generator_ColumnVarNameInTable="columnManagerFirstName" msprop:Generator_ColumnPropNameInRow="ManagerFirstName" msprop:Generator_ColumnPropNameInTable="ManagerFirstNameColumn" msprop:Generator_UserColumnName="ManagerFirstName" type="xs:string" />
+              <xs:element name="ManagerLastName" msprop:Generator_ColumnVarNameInTable="columnManagerLastName" msprop:Generator_ColumnPropNameInRow="ManagerLastName" msprop:Generator_ColumnPropNameInTable="ManagerLastNameColumn" msprop:Generator_UserColumnName="ManagerLastName" type="xs:string" />
+              <xs:element name="PunchedHours" msprop:Generator_ColumnVarNameInTable="columnPunchedHours" msprop:Generator_ColumnPropNameInRow="PunchedHours" msprop:Generator_ColumnPropNameInTable="PunchedHoursColumn" msprop:Generator_UserColumnName="PunchedHours" type="xs:decimal" />
+              <xs:element name="ProductionHours" msprop:Generator_ColumnVarNameInTable="columnProductionHours" msprop:Generator_ColumnPropNameInRow="ProductionHours" msprop:Generator_ColumnPropNameInTable="ProductionHoursColumn" msprop:Generator_UserColumnName="ProductionHours" type="xs:decimal" />
+              <xs:element name="HourVariance" msprop:Generator_ColumnVarNameInTable="columnHourVariance" msprop:Generator_ColumnPropNameInRow="HourVariance" msprop:Generator_ColumnPropNameInTable="HourVarianceColumn" msprop:Generator_UserColumnName="HourVariance" type="xs:decimal" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

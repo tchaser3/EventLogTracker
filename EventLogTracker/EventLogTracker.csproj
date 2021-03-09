@@ -62,6 +62,9 @@
     <Reference Include="EmployeeProjectAssignmentDLL">
       <HintPath>..\..\Blue Jay Class Library\EmployeeProjectAssignmentDLL.dll</HintPath>
     </Reference>
+    <Reference Include="EmployeePunchedHoursDLL">
+      <HintPath>..\..\Blue Jay Class Library\EmployeePunchedHoursDLL.dll</HintPath>
+    </Reference>
     <Reference Include="GEOFenceDLL">
       <HintPath>..\..\Blue Jay Class Library\GEOFenceDLL.dll</HintPath>
     </Reference>
@@ -172,6 +175,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DailyVehicleInspectionReportDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="EmployeeProductionPunchDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmployeeProductionPunchDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="EmployeeProductivityDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -182,6 +190,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FindDuplicateVehicleAssignmentsDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="ProductionManagerStatsDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductionManagerStatsDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="RunPunchedVsProduction.cs" />
     <Compile Include="SendEmailClass.cs" />
     <Compile Include="TotalProductivityDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -264,6 +278,17 @@
     <None Include="DailyVehicleInspectionReportDataSet.xss">
       <DependentUpon>DailyVehicleInspectionReportDataSet.xsd</DependentUpon>
     </None>
+    <None Include="EmployeeProductionPunchDataSet.xsc">
+      <DependentUpon>EmployeeProductionPunchDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="EmployeeProductionPunchDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>EmployeeProductionPunchDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="EmployeeProductionPunchDataSet.xss">
+      <DependentUpon>EmployeeProductionPunchDataSet.xsd</DependentUpon>
+    </None>
     <None Include="EmployeeProductivityDataSet.xsc">
       <DependentUpon>EmployeeProductivityDataSet.xsd</DependentUpon>
     </None>
@@ -285,6 +310,17 @@
     </None>
     <None Include="FindDuplicateVehicleAssignmentsDataSet.xss">
       <DependentUpon>FindDuplicateVehicleAssignmentsDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="ProductionManagerStatsDataSet.xsc">
+      <DependentUpon>ProductionManagerStatsDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="ProductionManagerStatsDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ProductionManagerStatsDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="ProductionManagerStatsDataSet.xss">
+      <DependentUpon>ProductionManagerStatsDataSet.xsd</DependentUpon>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

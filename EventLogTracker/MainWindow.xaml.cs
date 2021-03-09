@@ -73,6 +73,7 @@ namespace EventLogTracker
         ProjectMatrixClass TheProjectMatrixClass = new ProjectMatrixClass();
         ProductionProjectClass TheProductionProjectClass = new ProductionProjectClass();
         GEOFenceClass TheGeoFenceClass = new GEOFenceClass();
+        RunPunchedVsProduction TheRunPunchedVSProductionClass = new RunPunchedVsProduction();
 
         //setting up the time
         DispatcherTimer MyTimer = new DispatcherTimer();
@@ -471,8 +472,14 @@ namespace EventLogTracker
                         TheVehicleExceptionEmailClass.UpdateWeeklyVehicleReportsDB(TheWeeklyVehicleReportsDateDataSet);
 
                         TheAutomatedProductioinReportsClass.RunAutomatedProductionReports();
-                     }
+
+                        if (datTodaysDate.DayOfWeek == DayOfWeek.Tuesday)
+                        {
+                            TheRunPunchedVSProductionClass.RunPunchedVSProductionReport();
+                        }
+                    }
                 }
+                
             }
             catch (Exception Ex)
             {
@@ -481,6 +488,7 @@ namespace EventLogTracker
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
         }
+        
         private void SendVehicleAfterHourActivity()
         {
             int intCounter;

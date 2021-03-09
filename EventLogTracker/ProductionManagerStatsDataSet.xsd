@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ProductionManagerStatsDataSet" targetNamespace="http://tempuri.org/ProductionManagerStatsDataSet.xsd" xmlns:mstns="http://tempuri.org/ProductionManagerStatsDataSet.xsd" xmlns="http://tempuri.org/ProductionManagerStatsDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ProductionManagerStatsDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ProductionManagerStatsDataSet" msprop:Generator_UserDSName="ProductionManagerStatsDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="productionmanager" msprop:Generator_TableClassName="productionmanagerDataTable" msprop:Generator_TableVarName="tableproductionmanager" msprop:Generator_TablePropName="productionmanager" msprop:Generator_RowDeletingName="productionmanagerRowDeleting" msprop:Generator_RowChangingName="productionmanagerRowChanging" msprop:Generator_RowEvHandlerName="productionmanagerRowChangeEventHandler" msprop:Generator_RowDeletedName="productionmanagerRowDeleted" msprop:Generator_UserTableName="productionmanager" msprop:Generator_RowChangedName="productionmanagerRowChanged" msprop:Generator_RowEvArgName="productionmanagerRowChangeEvent" msprop:Generator_RowClassName="productionmanagerRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="FirstName" msprop:Generator_ColumnVarNameInTable="columnFirstName" msprop:Generator_ColumnPropNameInRow="FirstName" msprop:Generator_ColumnPropNameInTable="FirstNameColumn" msprop:Generator_UserColumnName="FirstName" type="xs:string" />
+              <xs:element name="LastName" msprop:Generator_ColumnVarNameInTable="columnLastName" msprop:Generator_ColumnPropNameInRow="LastName" msprop:Generator_ColumnPropNameInTable="LastNameColumn" msprop:Generator_UserColumnName="LastName" type="xs:string" />
+              <xs:element name="ZeroToFive" msprop:Generator_ColumnVarNameInTable="columnZeroToFive" msprop:Generator_ColumnPropNameInRow="ZeroToFive" msprop:Generator_ColumnPropNameInTable="ZeroToFiveColumn" msprop:Generator_UserColumnName="ZeroToFive" type="xs:int" />
+              <xs:element name="FiveToTen" msprop:Generator_ColumnVarNameInTable="columnFiveToTen" msprop:Generator_ColumnPropNameInRow="FiveToTen" msprop:Generator_ColumnPropNameInTable="FiveToTenColumn" msprop:Generator_UserColumnName="FiveToTen" type="xs:int" minOccurs="0" />
+              <xs:element name="Above10" msprop:Generator_ColumnVarNameInTable="columnAbove10" msprop:Generator_ColumnPropNameInRow="Above10" msprop:Generator_ColumnPropNameInTable="Above10Column" msprop:Generator_UserColumnName="Above10" type="xs:int" />
+              <xs:element name="PercentInTolerance" msprop:Generator_ColumnVarNameInTable="columnPercentInTolerance" msprop:Generator_ColumnPropNameInRow="PercentInTolerance" msprop:Generator_ColumnPropNameInTable="PercentInToleranceColumn" msprop:Generator_UserColumnName="PercentInTolerance" type="xs:decimal" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
