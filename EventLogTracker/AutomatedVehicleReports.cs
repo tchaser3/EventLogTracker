@@ -88,7 +88,7 @@ namespace EventLogTracker
 
             try
             {
-                blnFatalError = RunDailyVehicleInspectionReport(datStartDate);
+                /*blnFatalError = RunDailyVehicleInspectionReport(datStartDate);
 
                 if (blnFatalError == true)
                     throw new Exception();
@@ -106,7 +106,7 @@ namespace EventLogTracker
                 blnFatalError = EmailVehicleExceptionReport();
 
                 if (blnFatalError == true)
-                    throw new Exception();
+                    throw new Exception();*/
 
                 blnFatalError = RunVehiclesInYardReport(datStartDate);
 

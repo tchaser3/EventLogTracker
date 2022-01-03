@@ -36,6 +36,10 @@ namespace EventLogTracker
         ProductionManagerStatsDataSet TheProductionManagerStatsDataSet = new ProductionManagerStatsDataSet();
         ProductionManagerStatsDataSet TheFinalProductionManagerStatsDataSet = new ProductionManagerStatsDataSet();
         FindDesignTotalEmployeeProductivityHoursDataSet TheFindDesignTotalEmployeeProductivityHoursDataSet = new FindDesignTotalEmployeeProductivityHoursDataSet();
+        EmployeeOvertimeDataSet TheEmployeeOvertimeDataSet = new EmployeeOvertimeDataSet();
+        FindEmployeesOverFortyHoursDataSet TheFindEmployeesOverFortyHoursDataSet = new FindEmployeesOverFortyHoursDataSet();
+        FindEmployeeProductionForMiscCodeDataSet TheFindEmployeeProductionForMiscCodeDataSet = new FindEmployeeProductionForMiscCodeDataSet();
+        FindEmployeeProductivityMiscTotalHoursDataSet TheFindEmployeeProductivityMiscTotalHoursDataSet = new FindEmployeeProductivityMiscTotalHoursDataSet();
         string[] gstrLastName = new string[20];
 
         int gintManagerCounter;
@@ -445,6 +449,180 @@ namespace EventLogTracker
             catch (Exception Ex)
             {
                 TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Run Punched Vs Production Class // Run Punched Vs Production Report " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+        public void CreateOverTimeReport()
+        {
+            //setting local variables
+            int intCounter;
+            int intNumberOfRecords;
+            int intManagerID;
+            string strManager;
+            string strEmailAddress = "ERPProjectReports@bluejaycommunications.com";
+            string strHeader;
+            string strMessage;
+            DateTime datPayDate = DateTime.Now;
+            bool blnFatalError = false;
+
+            try
+            {
+                TheEmployeeOvertimeDataSet.employeeovertime.Rows.Clear();
+
+                datPayDate = TheDateSearchClass.RemoveTime(datPayDate);
+                datPayDate = TheDateSearchClass.SubtractingDays(datPayDate, 9);
+
+                TheFindEmployeesOverFortyHoursDataSet = TheEmployeePunchedHoursClass.FindEmployeesOverFortyHours(datPayDate);
+
+                intNumberOfRecords = TheFindEmployeesOverFortyHoursDataSet.FindEmployeesOverFortyHours.Rows.Count;
+
+                if(intNumberOfRecords > 0)
+                {
+                    for(intCounter = 0; intCounter < intNumberOfRecords; intCounter++)
+                    {
+                        intManagerID = TheFindEmployeesOverFortyHoursDataSet.FindEmployeesOverFortyHours[intCounter].ManagerID;
+
+                        TheFindEmployeeByEmployeeIDDataSet = TheEmployeeClass.FindEmployeeByEmployeeID(intManagerID);
+                        strManager = TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].FirstName + " ";
+                        strManager += TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].LastName;
+
+                        EmployeeOvertimeDataSet.employeeovertimeRow NewEmployeeRow = TheEmployeeOvertimeDataSet.employeeovertime.NewemployeeovertimeRow();
+
+                        NewEmployeeRow.FirstName = TheFindEmployeesOverFortyHoursDataSet.FindEmployeesOverFortyHours[intCounter].FirstName;
+                        NewEmployeeRow.LastName = TheFindEmployeesOverFortyHoursDataSet.FindEmployeesOverFortyHours[intCounter].LastName;
+                        NewEmployeeRow.HomeOffice = TheFindEmployeesOverFortyHoursDataSet.FindEmployeesOverFortyHours[intCounter].HomeOffice;
+                        NewEmployeeRow.Manager = strManager;
+                        NewEmployeeRow.TotalHours = TheFindEmployeesOverFortyHoursDataSet.FindEmployeesOverFortyHours[intCounter].PunchedHours;
+
+                        TheEmployeeOvertimeDataSet.employeeovertime.Rows.Add(NewEmployeeRow);
+                    }
+                }
+
+                strHeader = "Employee Overtime Report For " + Convert.ToString(datPayDate);
+
+                strMessage = "<h1>Employee Overtime Report For " + Convert.ToString(datPayDate) + "</h1>";
+                strMessage += "<p>               </p>";
+                strMessage += "<p>               </p>";
+                strMessage += "<table>";
+                strMessage += "<tr>";
+                strMessage += "<td><b>First Name</b></td>";
+                strMessage += "<td><b>Last Name</b></td>";
+                strMessage += "<td><b>Home Office</b></td>";
+                strMessage += "<td><b>Manager</b></td>";
+                strMessage += "<td><b>Total Hours</b></td>";
+                strMessage += "</tr>";
+                strMessage += "<p>               </p>";
+
+                intNumberOfRecords = TheEmployeeOvertimeDataSet.employeeovertime.Rows.Count;
+
+                if (intNumberOfRecords > 0)
+                {
+                    for (intCounter = 0; intCounter < intNumberOfRecords; intCounter++)
+                    {
+                        strMessage += "<tr>";
+                        strMessage += "<td>" + TheEmployeeOvertimeDataSet.employeeovertime[intCounter].FirstName + "</td>";
+                        strMessage += "<td>" + TheEmployeeOvertimeDataSet.employeeovertime[intCounter].LastName + "</td>";
+                        strMessage += "<td>" + TheEmployeeOvertimeDataSet.employeeovertime[intCounter].HomeOffice + "</td>";
+                        strMessage += "<td>" + TheEmployeeOvertimeDataSet.employeeovertime[intCounter].Manager + "</td>";
+                        strMessage += "<td>" + Convert.ToString(TheEmployeeOvertimeDataSet.employeeovertime[intCounter].TotalHours) + "</td>";
+                        strMessage += "</tr>";
+                        strMessage += "<p>               </p>";
+                    }
+                }
+
+                strMessage += "</table>";
+
+                blnFatalError = TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Run Punched Vs Production Class // Create Overtime Report " + Ex.Message);
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+
+
+        }
+        public void CreateEmployeeMiscReport()
+        {
+            //setting local variables
+            int intCounter;
+            int intNumberOfRecords;
+            decimal decTotalHours = 0;
+            string strEmailAddress = "ERPProjectReports@bluejaycommunications.com";
+            string strHeader;
+            string strMessage;
+            DateTime datPayDate = DateTime.Now;
+            bool blnFatalError = false;
+            int intRecordsReturned;
+
+            try
+            {
+                TheFindEmployeeProductionForMiscCodeDataSet = TheEmployeeProjectAssignmentClass.FindEmployeeProductionForMiscCode();
+
+                intNumberOfRecords = TheFindEmployeesOverFortyHoursDataSet.FindEmployeesOverFortyHours.Rows.Count;
+
+                TheFindEmployeeProductivityMiscTotalHoursDataSet = TheEmployeeProjectAssignmentClass.FindEmplolyeeProductivityMiscTotalHours();
+
+                intRecordsReturned = TheFindEmployeeProductionForMiscCodeDataSet.FindEmployeeProductionForMiscCode.Rows.Count;
+
+                if(intRecordsReturned > 0)
+                {
+                    decTotalHours = TheFindEmployeeProductivityMiscTotalHoursDataSet.FindEmployeeProductivityMiscTotalHours[0].TotalHours;
+                }
+
+                strHeader = "Employee Production for Misc with a Total Hours of " + Convert.ToString(decTotalHours);
+
+                strMessage = "<h1>Employee Production for Misc with a Total Hours of " + Convert.ToString(decTotalHours) + "</h1>";
+                strMessage += "<p>               </p>";
+                strMessage += "<p>               </p>";
+                strMessage += "<table>";
+                strMessage += "<tr>";
+                strMessage += "<td><b>Date</b></td>";
+                strMessage += "<td><b>BJC Project ID</b></td>";
+                strMessage += "<td><b>Customer Project ID</b></td>";
+                strMessage += "<td><b>Project Name</b></td>";
+                strMessage += "<td><b>First Name</b></td>";
+                strMessage += "<td><b>Last Name</b></td>";
+                strMessage += "<td><b>Home Office</b></td>";
+                strMessage += "<td><b>Total Hours</b></td>";
+                strMessage += "</tr>";
+                strMessage += "<p>               </p>";
+
+                if (intNumberOfRecords > 0)
+                {
+                    for (intCounter = 0; intCounter < intNumberOfRecords; intCounter++)
+                    {
+                        strMessage += "<tr>";
+                        strMessage += Convert.ToString(TheFindEmployeeProductionForMiscCodeDataSet.FindEmployeeProductionForMiscCode[intCounter].TransactionDate);
+                        strMessage += "<td>" + TheFindEmployeeProductionForMiscCodeDataSet.FindEmployeeProductionForMiscCode[intCounter].AssignedProjectID + "</td>";
+                        strMessage += "<td>" + TheFindEmployeeProductionForMiscCodeDataSet.FindEmployeeProductionForMiscCode[intCounter].CustomerAssignedID + "</td>";
+                        strMessage += "<td>" + TheFindEmployeeProductionForMiscCodeDataSet.FindEmployeeProductionForMiscCode[intCounter].ProjectName + "</td>";
+                        strMessage += "<td>" + TheFindEmployeeProductionForMiscCodeDataSet.FindEmployeeProductionForMiscCode[intCounter].FirstName + "</td>";
+                        strMessage += "<td>" + TheFindEmployeeProductionForMiscCodeDataSet.FindEmployeeProductionForMiscCode[intCounter].LastName + "</td>";
+                        strMessage += "<td>" + TheFindEmployeeProductionForMiscCodeDataSet.FindEmployeeProductionForMiscCode[intCounter].HomeOffice + "</td>";
+                        strMessage += "<td>" + Convert.ToString(TheFindEmployeeProductionForMiscCodeDataSet.FindEmployeeProductionForMiscCode[intCounter].TotalHours) + "</td>";
+                        strMessage += "</tr>";
+                        strMessage += "<p>               </p>";
+                    }
+                }
+
+                strMessage += "</table>";
+
+                blnFatalError = TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strMessage);
+
+                if (blnFatalError == true)
+                    throw new Exception();
+
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Run Punched Vs Production Class // Create Employee Misc Report " + Ex.Message);
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }

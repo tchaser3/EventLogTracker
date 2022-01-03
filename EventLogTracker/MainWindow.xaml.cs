@@ -305,6 +305,23 @@ namespace EventLogTracker
         }
         private void BeginTheProcess(object sender, EventArgs e)
         {
+            int intHours;
+            int intMinutes;
+
+            DateTime datTodaysDate = DateTime.Now;
+
+            intHours = datTodaysDate.Hour;
+            intMinutes = datTodaysDate.Minute;
+
+            if(intHours == 20)
+            {
+                if((intMinutes > 30) && (intMinutes < 40))
+                {
+                    Application.Current.Shutdown();
+                }
+                    
+            }
+
             UpdateGrid();
             UpdateVehicleStatus();
             SendVehicleReports();
@@ -444,20 +461,24 @@ namespace EventLogTracker
                     }
                     else
                     {
-                        ChangeVehicleInYardToWarehouse();
+                        //ChangeVehicleInYardToWarehouse();
                         datTodaysDate = TheDateSearchClass.RemoveTime(datTodaysDate);
                         datEndDate = TheDateSearchClass.AddingDays(datTodaysDate, 1);
                         TheVehicleExceptionEmailDataSet.vehicleexceptionemail[0].TransactionDate = datTransactionDate;
                         TheAutomatedVehicleReportsClass.RunAutomatedReports(datTodaysDate);
                         TheVehicleExceptionEmailClass.UpdateVehicleExceptionEmailDB(TheVehicleExceptionEmailDataSet);
-                        TheUpdatingWorkTaskStatsClass.UpdateWorkTaskStatsTable();
+                        //TheUpdatingWorkTaskStatsClass.UpdateWorkTaskStatsTable();
                         DataEntryReports(datStartDate, datEndDate);
                         SendOverdueProjectReport();
                         //SendVehicleAfterHourActivity();
 
                         if (datTodaysDate.DayOfWeek == DayOfWeek.Tuesday)
                         {
-                            TheRunPunchedVSProductionClass.RunPunchedVSProductionReport();
+                            //TheRunPunchedVSProductionClass.RunPunchedVSProductionReport();
+
+                            //TheRunPunchedVSProductionClass.CreateOverTimeReport();
+
+                            //TheRunPunchedVSProductionClass.CreateEmployeeMiscReport();
                         }
                     }
                 }
@@ -468,17 +489,15 @@ namespace EventLogTracker
 
                      if(datTodaysDate > TheWeeklyVehicleReportsDateDataSet.weeklyvehiclereportsdate[0].LastWeeklyReport)
                      {
-                        TheAutomatedVehicleReportsClass.RunWeeklyVehicleInspectionReport();
+                        //TheAutomatedVehicleReportsClass.RunWeeklyVehicleInspectionReport();
 
-                        TheAutomatedVehicleReportsClass.RunWeeklyVehiclesInYardReport();
+                       // TheAutomatedVehicleReportsClass.RunWeeklyVehiclesInYardReport();
 
                         TheWeeklyVehicleReportsDateDataSet.weeklyvehiclereportsdate[0].LastWeeklyReport = datTodaysDate;
 
                         TheVehicleExceptionEmailClass.UpdateWeeklyVehicleReportsDB(TheWeeklyVehicleReportsDateDataSet);
 
-                        TheAutomatedProductioinReportsClass.RunAutomatedProductionReports();
-
-                        
+                        TheAutomatedProductioinReportsClass.RunAutomatedProductionReports();                        
                     }
                 }
                 

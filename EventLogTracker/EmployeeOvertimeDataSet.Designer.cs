@@ -20,17 +20,17 @@ namespace EventLogTracker {
     [global::System.ComponentModel.DesignerCategoryAttribute("code")]
     [global::System.ComponentModel.ToolboxItem(true)]
     [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedDataSetSchema")]
-    [global::System.Xml.Serialization.XmlRootAttribute("AuditReportDataSet")]
+    [global::System.Xml.Serialization.XmlRootAttribute("EmployeeOvertimeDataSet")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.DataSet")]
-    public partial class AuditReportDataSet : global::System.Data.DataSet {
+    public partial class EmployeeOvertimeDataSet : global::System.Data.DataSet {
         
-        private auditreportDataTable tableauditreport;
+        private employeeovertimeDataTable tableemployeeovertime;
         
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        public AuditReportDataSet() {
+        public EmployeeOvertimeDataSet() {
             this.BeginInit();
             this.InitClass();
             global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
@@ -41,7 +41,7 @@ namespace EventLogTracker {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        protected AuditReportDataSet(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+        protected EmployeeOvertimeDataSet(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                 base(info, context, false) {
             if ((this.IsBinarySerialized(info, context) == true)) {
                 this.InitVars(false);
@@ -54,8 +54,8 @@ namespace EventLogTracker {
             if ((this.DetermineSchemaSerializationMode(info, context) == global::System.Data.SchemaSerializationMode.IncludeSchema)) {
                 global::System.Data.DataSet ds = new global::System.Data.DataSet();
                 ds.ReadXmlSchema(new global::System.Xml.XmlTextReader(new global::System.IO.StringReader(strSchema)));
-                if ((ds.Tables["auditreport"] != null)) {
-                    base.Tables.Add(new auditreportDataTable(ds.Tables["auditreport"]));
+                if ((ds.Tables["employeeovertime"] != null)) {
+                    base.Tables.Add(new employeeovertimeDataTable(ds.Tables["employeeovertime"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -79,9 +79,9 @@ namespace EventLogTracker {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Browsable(false)]
         [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public auditreportDataTable auditreport {
+        public employeeovertimeDataTable employeeovertime {
             get {
-                return this.tableauditreport;
+                return this.tableemployeeovertime;
             }
         }
         
@@ -127,7 +127,7 @@ namespace EventLogTracker {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         public override global::System.Data.DataSet Clone() {
-            AuditReportDataSet cln = ((AuditReportDataSet)(base.Clone()));
+            EmployeeOvertimeDataSet cln = ((EmployeeOvertimeDataSet)(base.Clone()));
             cln.InitVars();
             cln.SchemaSerializationMode = this.SchemaSerializationMode;
             return cln;
@@ -152,8 +152,8 @@ namespace EventLogTracker {
                 this.Reset();
                 global::System.Data.DataSet ds = new global::System.Data.DataSet();
                 ds.ReadXml(reader);
-                if ((ds.Tables["auditreport"] != null)) {
-                    base.Tables.Add(new auditreportDataTable(ds.Tables["auditreport"]));
+                if ((ds.Tables["employeeovertime"] != null)) {
+                    base.Tables.Add(new employeeovertimeDataTable(ds.Tables["employeeovertime"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -188,10 +188,10 @@ namespace EventLogTracker {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         internal void InitVars(bool initTable) {
-            this.tableauditreport = ((auditreportDataTable)(base.Tables["auditreport"]));
+            this.tableemployeeovertime = ((employeeovertimeDataTable)(base.Tables["employeeovertime"]));
             if ((initTable == true)) {
-                if ((this.tableauditreport != null)) {
-                    this.tableauditreport.InitVars();
+                if ((this.tableemployeeovertime != null)) {
+                    this.tableemployeeovertime.InitVars();
                 }
             }
         }
@@ -199,18 +199,18 @@ namespace EventLogTracker {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         private void InitClass() {
-            this.DataSetName = "AuditReportDataSet";
+            this.DataSetName = "EmployeeOvertimeDataSet";
             this.Prefix = "";
-            this.Namespace = "http://tempuri.org/AuditReportDataSet.xsd";
+            this.Namespace = "http://tempuri.org/EmployeeOvertimeDataSet.xsd";
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
-            this.tableauditreport = new auditreportDataTable();
-            base.Tables.Add(this.tableauditreport);
+            this.tableemployeeovertime = new employeeovertimeDataTable();
+            base.Tables.Add(this.tableemployeeovertime);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        private bool ShouldSerializeauditreport() {
+        private bool ShouldSerializeemployeeovertime() {
             return false;
         }
         
@@ -225,7 +225,7 @@ namespace EventLogTracker {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedDataSetSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-            AuditReportDataSet ds = new AuditReportDataSet();
+            EmployeeOvertimeDataSet ds = new EmployeeOvertimeDataSet();
             global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
             global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
             global::System.Xml.Schema.XmlSchemaAny any = new global::System.Xml.Schema.XmlSchemaAny();
@@ -270,43 +270,29 @@ namespace EventLogTracker {
         }
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        public delegate void auditreportRowChangeEventHandler(object sender, auditreportRowChangeEvent e);
+        public delegate void employeeovertimeRowChangeEventHandler(object sender, employeeovertimeRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class auditreportDataTable : global::System.Data.TypedTableBase<auditreportRow> {
-            
-            private global::System.Data.DataColumn columnVehicleNumber;
-            
-            private global::System.Data.DataColumn columnDate;
+        public partial class employeeovertimeDataTable : global::System.Data.TypedTableBase<employeeovertimeRow> {
             
             private global::System.Data.DataColumn columnFirstName;
             
             private global::System.Data.DataColumn columnLastName;
             
-            private global::System.Data.DataColumn columnFindings;
+            private global::System.Data.DataColumn columnHomeOffice;
             
-            private global::System.Data.DataColumn columnNotes;
+            private global::System.Data.DataColumn columnManager;
             
-            private global::System.Data.DataColumn columnCleanlinessNotes;
-            
-            private global::System.Data.DataColumn columnConesCorrect;
-            
-            private global::System.Data.DataColumn columnSignsCorrect;
-            
-            private global::System.Data.DataColumn columnFirstAidCorrect;
-            
-            private global::System.Data.DataColumn columnFireExtinguisherCorrect;
-            
-            private global::System.Data.DataColumn columnToolNotes;
+            private global::System.Data.DataColumn columnTotalHours;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public auditreportDataTable() {
-                this.TableName = "auditreport";
+            public employeeovertimeDataTable() {
+                this.TableName = "employeeovertime";
                 this.BeginInit();
                 this.InitClass();
                 this.EndInit();
@@ -314,7 +300,7 @@ namespace EventLogTracker {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            internal auditreportDataTable(global::System.Data.DataTable table) {
+            internal employeeovertimeDataTable(global::System.Data.DataTable table) {
                 this.TableName = table.TableName;
                 if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
                     this.CaseSensitive = table.CaseSensitive;
@@ -331,25 +317,9 @@ namespace EventLogTracker {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected auditreportDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+            protected employeeovertimeDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                     base(info, context) {
                 this.InitVars();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn VehicleNumberColumn {
-                get {
-                    return this.columnVehicleNumber;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DateColumn {
-                get {
-                    return this.columnDate;
-                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -370,65 +340,25 @@ namespace EventLogTracker {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn FindingsColumn {
+            public global::System.Data.DataColumn HomeOfficeColumn {
                 get {
-                    return this.columnFindings;
+                    return this.columnHomeOffice;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn NotesColumn {
+            public global::System.Data.DataColumn ManagerColumn {
                 get {
-                    return this.columnNotes;
+                    return this.columnManager;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn CleanlinessNotesColumn {
+            public global::System.Data.DataColumn TotalHoursColumn {
                 get {
-                    return this.columnCleanlinessNotes;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn ConesCorrectColumn {
-                get {
-                    return this.columnConesCorrect;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn SignsCorrectColumn {
-                get {
-                    return this.columnSignsCorrect;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn FirstAidCorrectColumn {
-                get {
-                    return this.columnFirstAidCorrect;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn FireExtinguisherCorrectColumn {
-                get {
-                    return this.columnFireExtinguisherCorrect;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn ToolNotesColumn {
-                get {
-                    return this.columnToolNotes;
+                    return this.columnTotalHours;
                 }
             }
             
@@ -443,56 +373,49 @@ namespace EventLogTracker {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public auditreportRow this[int index] {
+            public employeeovertimeRow this[int index] {
                 get {
-                    return ((auditreportRow)(this.Rows[index]));
+                    return ((employeeovertimeRow)(this.Rows[index]));
                 }
             }
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event auditreportRowChangeEventHandler auditreportRowChanging;
+            public event employeeovertimeRowChangeEventHandler employeeovertimeRowChanging;
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event auditreportRowChangeEventHandler auditreportRowChanged;
+            public event employeeovertimeRowChangeEventHandler employeeovertimeRowChanged;
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event auditreportRowChangeEventHandler auditreportRowDeleting;
+            public event employeeovertimeRowChangeEventHandler employeeovertimeRowDeleting;
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event auditreportRowChangeEventHandler auditreportRowDeleted;
+            public event employeeovertimeRowChangeEventHandler employeeovertimeRowDeleted;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void AddauditreportRow(auditreportRow row) {
+            public void AddemployeeovertimeRow(employeeovertimeRow row) {
                 this.Rows.Add(row);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public auditreportRow AddauditreportRow(string VehicleNumber, System.DateTime Date, string FirstName, string LastName, string Findings, string Notes, string CleanlinessNotes, string ConesCorrect, string SignsCorrect, string FirstAidCorrect, string FireExtinguisherCorrect, string ToolNotes) {
-                auditreportRow rowauditreportRow = ((auditreportRow)(this.NewRow()));
+            public employeeovertimeRow AddemployeeovertimeRow(string FirstName, string LastName, string HomeOffice, string Manager, decimal TotalHours) {
+                employeeovertimeRow rowemployeeovertimeRow = ((employeeovertimeRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        VehicleNumber,
-                        Date,
                         FirstName,
                         LastName,
-                        Findings,
-                        Notes,
-                        CleanlinessNotes,
-                        ConesCorrect,
-                        SignsCorrect,
-                        FirstAidCorrect,
-                        FireExtinguisherCorrect,
-                        ToolNotes};
-                rowauditreportRow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowauditreportRow);
-                return rowauditreportRow;
+                        HomeOffice,
+                        Manager,
+                        TotalHours};
+                rowemployeeovertimeRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowemployeeovertimeRow);
+                return rowemployeeovertimeRow;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public override global::System.Data.DataTable Clone() {
-                auditreportDataTable cln = ((auditreportDataTable)(base.Clone()));
+                employeeovertimeDataTable cln = ((employeeovertimeDataTable)(base.Clone()));
                 cln.InitVars();
                 return cln;
             }
@@ -500,90 +423,63 @@ namespace EventLogTracker {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override global::System.Data.DataTable CreateInstance() {
-                return new auditreportDataTable();
+                return new employeeovertimeDataTable();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             internal void InitVars() {
-                this.columnVehicleNumber = base.Columns["VehicleNumber"];
-                this.columnDate = base.Columns["Date"];
                 this.columnFirstName = base.Columns["FirstName"];
                 this.columnLastName = base.Columns["LastName"];
-                this.columnFindings = base.Columns["Findings"];
-                this.columnNotes = base.Columns["Notes"];
-                this.columnCleanlinessNotes = base.Columns["CleanlinessNotes"];
-                this.columnConesCorrect = base.Columns["ConesCorrect"];
-                this.columnSignsCorrect = base.Columns["SignsCorrect"];
-                this.columnFirstAidCorrect = base.Columns["FirstAidCorrect"];
-                this.columnFireExtinguisherCorrect = base.Columns["FireExtinguisherCorrect"];
-                this.columnToolNotes = base.Columns["ToolNotes"];
+                this.columnHomeOffice = base.Columns["HomeOffice"];
+                this.columnManager = base.Columns["Manager"];
+                this.columnTotalHours = base.Columns["TotalHours"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             private void InitClass() {
-                this.columnVehicleNumber = new global::System.Data.DataColumn("VehicleNumber", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnVehicleNumber);
-                this.columnDate = new global::System.Data.DataColumn("Date", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDate);
                 this.columnFirstName = new global::System.Data.DataColumn("FirstName", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFirstName);
                 this.columnLastName = new global::System.Data.DataColumn("LastName", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnLastName);
-                this.columnFindings = new global::System.Data.DataColumn("Findings", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFindings);
-                this.columnNotes = new global::System.Data.DataColumn("Notes", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNotes);
-                this.columnCleanlinessNotes = new global::System.Data.DataColumn("CleanlinessNotes", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnCleanlinessNotes);
-                this.columnConesCorrect = new global::System.Data.DataColumn("ConesCorrect", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnConesCorrect);
-                this.columnSignsCorrect = new global::System.Data.DataColumn("SignsCorrect", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnSignsCorrect);
-                this.columnFirstAidCorrect = new global::System.Data.DataColumn("FirstAidCorrect", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFirstAidCorrect);
-                this.columnFireExtinguisherCorrect = new global::System.Data.DataColumn("FireExtinguisherCorrect", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnFireExtinguisherCorrect);
-                this.columnToolNotes = new global::System.Data.DataColumn("ToolNotes", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnToolNotes);
-                this.columnVehicleNumber.AllowDBNull = false;
-                this.columnDate.AllowDBNull = false;
+                this.columnHomeOffice = new global::System.Data.DataColumn("HomeOffice", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnHomeOffice);
+                this.columnManager = new global::System.Data.DataColumn("Manager", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnManager);
+                this.columnTotalHours = new global::System.Data.DataColumn("TotalHours", typeof(decimal), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTotalHours);
                 this.columnFirstName.AllowDBNull = false;
                 this.columnLastName.AllowDBNull = false;
-                this.columnFindings.AllowDBNull = false;
-                this.columnNotes.AllowDBNull = false;
-                this.columnCleanlinessNotes.AllowDBNull = false;
-                this.columnConesCorrect.AllowDBNull = false;
-                this.columnSignsCorrect.AllowDBNull = false;
-                this.columnFirstAidCorrect.AllowDBNull = false;
-                this.columnToolNotes.AllowDBNull = false;
+                this.columnHomeOffice.AllowDBNull = false;
+                this.columnManager.AllowDBNull = false;
+                this.columnTotalHours.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public auditreportRow NewauditreportRow() {
-                return ((auditreportRow)(this.NewRow()));
+            public employeeovertimeRow NewemployeeovertimeRow() {
+                return ((employeeovertimeRow)(this.NewRow()));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new auditreportRow(builder);
+                return new employeeovertimeRow(builder);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override global::System.Type GetRowType() {
-                return typeof(auditreportRow);
+                return typeof(employeeovertimeRow);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowChanged(e);
-                if ((this.auditreportRowChanged != null)) {
-                    this.auditreportRowChanged(this, new auditreportRowChangeEvent(((auditreportRow)(e.Row)), e.Action));
+                if ((this.employeeovertimeRowChanged != null)) {
+                    this.employeeovertimeRowChanged(this, new employeeovertimeRowChangeEvent(((employeeovertimeRow)(e.Row)), e.Action));
                 }
             }
             
@@ -591,8 +487,8 @@ namespace EventLogTracker {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowChanging(e);
-                if ((this.auditreportRowChanging != null)) {
-                    this.auditreportRowChanging(this, new auditreportRowChangeEvent(((auditreportRow)(e.Row)), e.Action));
+                if ((this.employeeovertimeRowChanging != null)) {
+                    this.employeeovertimeRowChanging(this, new employeeovertimeRowChangeEvent(((employeeovertimeRow)(e.Row)), e.Action));
                 }
             }
             
@@ -600,8 +496,8 @@ namespace EventLogTracker {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowDeleted(e);
-                if ((this.auditreportRowDeleted != null)) {
-                    this.auditreportRowDeleted(this, new auditreportRowChangeEvent(((auditreportRow)(e.Row)), e.Action));
+                if ((this.employeeovertimeRowDeleted != null)) {
+                    this.employeeovertimeRowDeleted(this, new employeeovertimeRowChangeEvent(((employeeovertimeRow)(e.Row)), e.Action));
                 }
             }
             
@@ -609,14 +505,14 @@ namespace EventLogTracker {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowDeleting(e);
-                if ((this.auditreportRowDeleting != null)) {
-                    this.auditreportRowDeleting(this, new auditreportRowChangeEvent(((auditreportRow)(e.Row)), e.Action));
+                if ((this.employeeovertimeRowDeleting != null)) {
+                    this.employeeovertimeRowDeleting(this, new employeeovertimeRowChangeEvent(((employeeovertimeRow)(e.Row)), e.Action));
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void RemoveauditreportRow(auditreportRow row) {
+            public void RemoveemployeeovertimeRow(employeeovertimeRow row) {
                 this.Rows.Remove(row);
             }
             
@@ -625,7 +521,7 @@ namespace EventLogTracker {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                AuditReportDataSet ds = new AuditReportDataSet();
+                EmployeeOvertimeDataSet ds = new EmployeeOvertimeDataSet();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -643,7 +539,7 @@ namespace EventLogTracker {
                 type.Attributes.Add(attribute1);
                 global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
                 attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "auditreportDataTable";
+                attribute2.FixedValue = "employeeovertimeDataTable";
                 type.Attributes.Add(attribute2);
                 type.Particle = sequence;
                 global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
@@ -687,47 +583,25 @@ namespace EventLogTracker {
         /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
-        public partial class auditreportRow : global::System.Data.DataRow {
+        public partial class employeeovertimeRow : global::System.Data.DataRow {
             
-            private auditreportDataTable tableauditreport;
+            private employeeovertimeDataTable tableemployeeovertime;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            internal auditreportRow(global::System.Data.DataRowBuilder rb) : 
+            internal employeeovertimeRow(global::System.Data.DataRowBuilder rb) : 
                     base(rb) {
-                this.tableauditreport = ((auditreportDataTable)(this.Table));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string VehicleNumber {
-                get {
-                    return ((string)(this[this.tableauditreport.VehicleNumberColumn]));
-                }
-                set {
-                    this[this.tableauditreport.VehicleNumberColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public System.DateTime Date {
-                get {
-                    return ((global::System.DateTime)(this[this.tableauditreport.DateColumn]));
-                }
-                set {
-                    this[this.tableauditreport.DateColumn] = value;
-                }
+                this.tableemployeeovertime = ((employeeovertimeDataTable)(this.Table));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public string FirstName {
                 get {
-                    return ((string)(this[this.tableauditreport.FirstNameColumn]));
+                    return ((string)(this[this.tableemployeeovertime.FirstNameColumn]));
                 }
                 set {
-                    this[this.tableauditreport.FirstNameColumn] = value;
+                    this[this.tableemployeeovertime.FirstNameColumn] = value;
                 }
             }
             
@@ -735,116 +609,44 @@ namespace EventLogTracker {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public string LastName {
                 get {
-                    return ((string)(this[this.tableauditreport.LastNameColumn]));
+                    return ((string)(this[this.tableemployeeovertime.LastNameColumn]));
                 }
                 set {
-                    this[this.tableauditreport.LastNameColumn] = value;
+                    this[this.tableemployeeovertime.LastNameColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Findings {
+            public string HomeOffice {
                 get {
-                    return ((string)(this[this.tableauditreport.FindingsColumn]));
+                    return ((string)(this[this.tableemployeeovertime.HomeOfficeColumn]));
                 }
                 set {
-                    this[this.tableauditreport.FindingsColumn] = value;
+                    this[this.tableemployeeovertime.HomeOfficeColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Notes {
+            public string Manager {
                 get {
-                    return ((string)(this[this.tableauditreport.NotesColumn]));
+                    return ((string)(this[this.tableemployeeovertime.ManagerColumn]));
                 }
                 set {
-                    this[this.tableauditreport.NotesColumn] = value;
+                    this[this.tableemployeeovertime.ManagerColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string CleanlinessNotes {
+            public decimal TotalHours {
                 get {
-                    return ((string)(this[this.tableauditreport.CleanlinessNotesColumn]));
+                    return ((decimal)(this[this.tableemployeeovertime.TotalHoursColumn]));
                 }
                 set {
-                    this[this.tableauditreport.CleanlinessNotesColumn] = value;
+                    this[this.tableemployeeovertime.TotalHoursColumn] = value;
                 }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string ConesCorrect {
-                get {
-                    return ((string)(this[this.tableauditreport.ConesCorrectColumn]));
-                }
-                set {
-                    this[this.tableauditreport.ConesCorrectColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string SignsCorrect {
-                get {
-                    return ((string)(this[this.tableauditreport.SignsCorrectColumn]));
-                }
-                set {
-                    this[this.tableauditreport.SignsCorrectColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string FirstAidCorrect {
-                get {
-                    return ((string)(this[this.tableauditreport.FirstAidCorrectColumn]));
-                }
-                set {
-                    this[this.tableauditreport.FirstAidCorrectColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string FireExtinguisherCorrect {
-                get {
-                    try {
-                        return ((string)(this[this.tableauditreport.FireExtinguisherCorrectColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'FireExtinguisherCorrect\' in table \'auditreport\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableauditreport.FireExtinguisherCorrectColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string ToolNotes {
-                get {
-                    return ((string)(this[this.tableauditreport.ToolNotesColumn]));
-                }
-                set {
-                    this[this.tableauditreport.ToolNotesColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsFireExtinguisherCorrectNull() {
-                return this.IsNull(this.tableauditreport.FireExtinguisherCorrectColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetFireExtinguisherCorrectNull() {
-                this[this.tableauditreport.FireExtinguisherCorrectColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -852,22 +654,22 @@ namespace EventLogTracker {
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        public class auditreportRowChangeEvent : global::System.EventArgs {
+        public class employeeovertimeRowChangeEvent : global::System.EventArgs {
             
-            private auditreportRow eventRow;
+            private employeeovertimeRow eventRow;
             
             private global::System.Data.DataRowAction eventAction;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public auditreportRowChangeEvent(auditreportRow row, global::System.Data.DataRowAction action) {
+            public employeeovertimeRowChangeEvent(employeeovertimeRow row, global::System.Data.DataRowAction action) {
                 this.eventRow = row;
                 this.eventAction = action;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public auditreportRow Row {
+            public employeeovertimeRow Row {
                 get {
                     return this.eventRow;
                 }
