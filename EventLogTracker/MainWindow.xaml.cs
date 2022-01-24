@@ -474,11 +474,11 @@ namespace EventLogTracker
 
                         if (datTodaysDate.DayOfWeek == DayOfWeek.Tuesday)
                         {
-                            //TheRunPunchedVSProductionClass.RunPunchedVSProductionReport();
+                            TheRunPunchedVSProductionClass.RunPunchedVSProductionReport();
 
-                            //TheRunPunchedVSProductionClass.CreateOverTimeReport();
+                            TheRunPunchedVSProductionClass.CreateOverTimeReport();
 
-                            //TheRunPunchedVSProductionClass.CreateEmployeeMiscReport();
+                            TheRunPunchedVSProductionClass.CreateEmployeeMiscReport();
                         }
                     }
                 }
