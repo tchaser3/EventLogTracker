@@ -70,7 +70,7 @@ namespace EventLogTracker
             try
             {
                 datEndDate = DateTime.Now;
-                datStartDate = TheDateSearchClass.SubtractingDays(datEndDate, 35);
+                datStartDate = TheDateSearchClass.SubtractingDays(datEndDate, 90);
                 TheEmployeeProductivityDataSet.employeeproductivity.Rows.Clear();
                 TheCompleteProjectProductivityDataSet.completeprojectproductivity.Rows.Clear();
 
