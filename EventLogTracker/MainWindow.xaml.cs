@@ -74,7 +74,7 @@ namespace EventLogTracker
         ProductionProjectClass TheProductionProjectClass = new ProductionProjectClass();
         GEOFenceClass TheGeoFenceClass = new GEOFenceClass();
         RunPunchedVsProduction TheRunPunchedVSProductionClass = new RunPunchedVsProduction();
-
+       
         //setting up the time
         DispatcherTimer MyTimer = new DispatcherTimer();
         DispatcherTimer AccessTimer = new DispatcherTimer();
@@ -100,6 +100,7 @@ namespace EventLogTracker
         FindOverdueOpenProductionProjectsDataSet TheFindOverDueProductionProjectsDataSet = new FindOverdueOpenProductionProjectsDataSet();
         FindEmployeeByEmployeeIDDataSet TheFindEmployeeByEmployeeIDDataSet = new FindEmployeeByEmployeeIDDataSet();
         FindGEOFenceTransactionDateRangeDataSet TheFindGeoFenceTransactionDateRangeDataSet = new FindGEOFenceTransactionDateRangeDataSet();
+        FindEmployeeByLastNameDataSet TheFindEmployeeByLastNameDataSet = new FindEmployeeByLastNameDataSet();
 
         FindDuplicateVehicleAssignmentsDataSet aFindDuplicateVehicleAsignmentsDataSet;
         FindDuplicateVehicleAssignmentsDataSet TheFindDuplicateVehicleAssignmentsDataSet = new FindDuplicateVehicleAssignmentsDataSet();
@@ -108,6 +109,7 @@ namespace EventLogTracker
         int gintLogCounter;
         int gintLogUpperLimit;
         bool gblnItemRan = false;
+        int gintEmployeeID;
 
         int gintNumberOfRecords;
 
@@ -175,7 +177,7 @@ namespace EventLogTracker
 
                 datEndDate = TheDateSearchClass.RemoveTime(datEndDate);
 
-                datStartDate = TheDateSearchClass.SubtractingDays(datEndDate, 5);
+                datStartDate = TheDateSearchClass.SubtractingDays(datEndDate, 15);
 
                 datEndDate = TheDateSearchClass.AddingDays(datEndDate, 1);
 
@@ -284,12 +286,7 @@ namespace EventLogTracker
                 if (blnFatalError == true)
                     throw new Exception();
 
-                blnFatalError = TheSendEmailClass.SendEmail("csimmons@bluejaycommunications.com", strHeader, strMessage);
-
-                if (blnFatalError == true)
-                    throw new Exception();
-
-                blnFatalError = TheSendEmailClass.SendEmail("mchapman@bluejaycommunications.com", strHeader, strMessage);
+               blnFatalError = TheSendEmailClass.SendEmail("mchapman@bluejaycommunications.com", strHeader, strMessage);
 
                 if (blnFatalError == true)
                     throw new Exception();
@@ -820,9 +817,67 @@ namespace EventLogTracker
                 TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Update Vehicle Status " + Ex.Message);
             }
         }
+        private void LoginUser()
+        {
+            //setting up the variables
+            string strComputerName;
+            string strUserName;
+            string strFirstName;
+            string strLastName;
+            int intNumberOfRecords;
+            int intCounter;
+            string strTempFirstName;
+
+            strComputerName = System.Environment.MachineName;
+            strUserName = System.Environment.UserName;
+
+            try
+            {
+                if (strUserName.Contains("2"))
+                {
+                    strUserName = strUserName.Substring(0, strUserName.Length - 1);
+                }
+
+                strLastName = strUserName.Substring(1).ToUpper();
+                strFirstName = strUserName.Substring(0, 1).ToUpper();
+
+                TheFindEmployeeByLastNameDataSet = TheEmployeeClass.FindEmployeesByLastNameKeyWord(strLastName);
+
+                intNumberOfRecords = TheFindEmployeeByLastNameDataSet.FindEmployeeByLastName.Rows.Count;
+
+                if (intNumberOfRecords == 1)
+                {
+                    gintEmployeeID = TheFindEmployeeByLastNameDataSet.FindEmployeeByLastName[0].EmployeeID;
+                }
+                else if (intNumberOfRecords > 1)
+                {
+                    for (intCounter = 0; intCounter < intNumberOfRecords; intCounter++)
+                    {
+                        strTempFirstName = TheFindEmployeeByLastNameDataSet.FindEmployeeByLastName[intCounter].FirstName.Substring(0, 1).ToUpper();
+
+                        if (strTempFirstName == strFirstName)
+                        {
+                            gintEmployeeID = TheFindEmployeeByLastNameDataSet.FindEmployeeByLastName[intCounter].EmployeeID;
+                        }
+                    }
+                }
+
+                TheEmployeeDataEntryClass.InsertIntoEmployeeDateEntry(gintEmployeeID, strUserName + " " + strComputerName + " Event Log Tracker");
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Main Window // Login User " + Ex.ToString());
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+
+            
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            LoginUser();
+
             gintNumberOfRecords = 0;
             DateTime datEndDate = DateTime.Now;
             DateTime datStartDate;

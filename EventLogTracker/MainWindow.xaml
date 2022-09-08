@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EventLogTracker"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="900" Loaded="Window_Loaded">
+        Title="MainWindow" Height="600" Width="900" Loaded="Window_Loaded">
     <Window.Resources>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#20232A" />
@@ -52,10 +52,18 @@
                 <GradientStop Color="LightBlue" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" Margin="748,202,0,0" VerticalAlignment="Top" Width="125" Height="55" FontSize="18" Click="btnClose_Click"/>
-        <DataGrid x:Name="dgrResults" HorizontalAlignment="Left" Height="252" Margin="21,148,0,0" VerticalAlignment="Top" Width="707" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AlternationCount="1" RowBackground="AliceBlue" AlternatingRowBackground="LightBlue"/>
-        <Image HorizontalAlignment="Left" Height="81" Margin="360,10,0,0" VerticalAlignment="Top" Width="171" Source="logo.png" Stretch="Fill"/>
-        <Label x:Name="lblTitle" Content="Event Log Tracker" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Margin="10,101,0,0" VerticalAlignment="Top" Width="872"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="200" />
+        </Grid.ColumnDefinitions>
+        <Button x:Name="btnClose" Grid.Column="1" Grid.Row="1" Content="Close" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150" Height="75" FontSize="25" Click="btnClose_Click"/>
+        <DataGrid x:Name="dgrResults" Grid.Row="1" Grid.Column="0" HorizontalAlignment="center" Height="auto" VerticalAlignment="Center" Width="auto" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AlternationCount="1" RowBackground="AliceBlue" AlternatingRowBackground="LightBlue"/>
+        <Image HorizontalAlignment="Center" Grid.ColumnSpan="2" Height="81" VerticalAlignment="Top" Width="171" Source="logo.png" Stretch="Fill"/>
+        <Label x:Name="lblTitle" Content="Event Log Tracker" HorizontalAlignment="Center" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Margin="10,101,0,0" VerticalAlignment="Top" Width="872"/>
 
 
     </Grid>
