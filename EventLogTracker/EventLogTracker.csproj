@@ -38,6 +38,9 @@
     <ApplicationIcon>blue_jay_icon_CM1_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AfterHoursWorkDLL">
+      <HintPath>..\..\Blue Jay Class Library\AfterHoursWorkDLL.dll</HintPath>
+    </Reference>
     <Reference Include="AuditReportEmailListDLL">
       <HintPath>..\..\Blue Jay Class Library\AuditReportEmailListDLL.dll</HintPath>
     </Reference>
@@ -175,6 +178,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DailyVehicleInspectionReportDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="EmployeeAfterHourWorkReportDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmployeeAfterHourWorkReportDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="EmployeeOvertimeDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -282,6 +290,17 @@
     </None>
     <None Include="DailyVehicleInspectionReportDataSet.xss">
       <DependentUpon>DailyVehicleInspectionReportDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="EmployeeAfterHourWorkReportDataSet.xsc">
+      <DependentUpon>EmployeeAfterHourWorkReportDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="EmployeeAfterHourWorkReportDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>EmployeeAfterHourWorkReportDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="EmployeeAfterHourWorkReportDataSet.xss">
+      <DependentUpon>EmployeeAfterHourWorkReportDataSet.xsd</DependentUpon>
     </None>
     <None Include="EmployeeOvertimeDataSet.xsc">
       <DependentUpon>EmployeeOvertimeDataSet.xsd</DependentUpon>

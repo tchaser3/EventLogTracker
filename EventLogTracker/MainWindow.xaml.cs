@@ -476,6 +476,8 @@ namespace EventLogTracker
                             TheRunPunchedVSProductionClass.CreateOverTimeReport();
 
                             TheRunPunchedVSProductionClass.CreateEmployeeMiscReport();
+
+                            TheRunPunchedVSProductionClass.EmailOverNightReport();
                         }
                     }
                 }

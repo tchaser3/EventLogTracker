@@ -11,6 +11,7 @@ using DateSearchDLL;
 using DataValidationDLL;
 using Microsoft.Win32;
 using DesignProductivityDLL;
+using AfterHoursWorkDLL;
 
 namespace EventLogTracker
 {
@@ -26,7 +27,7 @@ namespace EventLogTracker
         DataValidationClass TheDataValidationClass = new DataValidationClass();
         DesignProductivityClass TheDesignProductivityClass = new DesignProductivityClass();
         SendEmailClass TheSendEmailClass = new SendEmailClass();
-
+        AfterHoursWorkClass TheAfterHoursWorkClass = new AfterHoursWorkClass();
 
         EmployeeProductionPunchDataSet TheEmployeeProductionPunchDataSet = new EmployeeProductionPunchDataSet();
         FindActiveNonExemptEmployeesByPayDateDataSet TheFindActiveNoExemptEmployeesDataSet = new FindActiveNonExemptEmployeesByPayDateDataSet();
@@ -40,6 +41,9 @@ namespace EventLogTracker
         FindEmployeesOverFortyHoursDataSet TheFindEmployeesOverFortyHoursDataSet = new FindEmployeesOverFortyHoursDataSet();
         FindEmployeeProductionForMiscCodeDataSet TheFindEmployeeProductionForMiscCodeDataSet = new FindEmployeeProductionForMiscCodeDataSet();
         FindEmployeeProductivityMiscTotalHoursDataSet TheFindEmployeeProductivityMiscTotalHoursDataSet = new FindEmployeeProductivityMiscTotalHoursDataSet();
+        FindEmployeeAfterHoursWorkThiryDayReportDataSet TheFindEmployeeAfterHoursWorkThiryDayReportDataSet = new FindEmployeeAfterHoursWorkThiryDayReportDataSet();
+        EmployeeAfterHourWorkReportDataSet TheEmployeeAfterHourWorkReportDataSet = new EmployeeAfterHourWorkReportDataSet();
+
         string[] gstrLastName = new string[20];
 
         int gintManagerCounter;
@@ -96,7 +100,7 @@ namespace EventLogTracker
 
                 datEndDate = DateTime.Now;
                 datEndDate = TheDateSearchClass.RemoveTime(datEndDate);
-                datEndDate = TheDateSearchClass.SubtractingDays(datEndDate, 16);
+                datEndDate = TheDateSearchClass.SubtractingDays(datEndDate, 9);
                 datStartDate = TheDateSearchClass.SubtractingDays(datEndDate, 6);
 
                 TheFindActiveNoExemptEmployeesDataSet = TheEmployeeClass.FindActiveNonExemptEmployeesByPayDate(datStartDate);
@@ -452,6 +456,156 @@ namespace EventLogTracker
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
+        }
+        private void LoadAfterHoursDataSet()
+        {
+            int intCounter;
+            int intNumberOfRecords;
+            int intEmployeeID;
+            string strManagerName = "";
+            string strOfficeName = "";
+
+            try
+            {
+                TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork.Rows.Clear();
+                TheFindEmployeeAfterHoursWorkThiryDayReportDataSet = TheAfterHoursWorkClass.FindEmployeeOverNightWorkThirtyDayReport();
+
+                intNumberOfRecords = TheFindEmployeeAfterHoursWorkThiryDayReportDataSet.FindEmployeeAfterHoursWorkThirtyDayReport.Rows.Count;
+
+                if (intNumberOfRecords > 0)
+                {
+                    for (intCounter = 0; intCounter < intNumberOfRecords; intCounter++)
+                    {
+                        intEmployeeID = TheFindEmployeeAfterHoursWorkThiryDayReportDataSet.FindEmployeeAfterHoursWorkThirtyDayReport[intCounter].ManagerID;
+
+                        TheFindEmployeeByEmployeeIDDataSet = TheEmployeeClass.FindEmployeeByEmployeeID(intEmployeeID);
+
+                        if (TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID.Rows.Count > 0)
+                        {
+                            strManagerName = TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].FirstName + " ";
+                            strManagerName += TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].LastName;
+                        }
+
+                        intEmployeeID = TheFindEmployeeAfterHoursWorkThiryDayReportDataSet.FindEmployeeAfterHoursWorkThirtyDayReport[intCounter].OfficeID;
+
+                        TheFindEmployeeByEmployeeIDDataSet = TheEmployeeClass.FindEmployeeByEmployeeID(intEmployeeID);
+
+                        strOfficeName = TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].FirstName;
+
+                        EmployeeAfterHourWorkReportDataSet.employeeafterhourworkRow NewAfterWork = TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork.NewemployeeafterhourworkRow();
+
+                        NewAfterWork.AssignedOffice = strOfficeName;
+                        NewAfterWork.BuildingAccess = TheFindEmployeeAfterHoursWorkThiryDayReportDataSet.FindEmployeeAfterHoursWorkThirtyDayReport[intCounter].BuildingAccess;
+                        NewAfterWork.CustomerProjectID = TheFindEmployeeAfterHoursWorkThiryDayReportDataSet.FindEmployeeAfterHoursWorkThirtyDayReport[intCounter].CustomerAssignedID;
+                        NewAfterWork.AssignedProjectID = TheFindEmployeeAfterHoursWorkThiryDayReportDataSet.FindEmployeeAfterHoursWorkThirtyDayReport[intCounter].AssignedProjectID;
+                        NewAfterWork.Employee = TheFindEmployeeAfterHoursWorkThiryDayReportDataSet.FindEmployeeAfterHoursWorkThirtyDayReport[intCounter].Manager;
+                        NewAfterWork.Manager = strManagerName;
+                        NewAfterWork.OutTime = TheFindEmployeeAfterHoursWorkThiryDayReportDataSet.FindEmployeeAfterHoursWorkThirtyDayReport[intCounter].OutTime;
+                        NewAfterWork.InETA = TheFindEmployeeAfterHoursWorkThiryDayReportDataSet.FindEmployeeAfterHoursWorkThirtyDayReport[intCounter].InETA;
+                        NewAfterWork.ProjectName = TheFindEmployeeAfterHoursWorkThiryDayReportDataSet.FindEmployeeAfterHoursWorkThirtyDayReport[intCounter].ProjectName;
+                        NewAfterWork.VehicleNumber = TheFindEmployeeAfterHoursWorkThiryDayReportDataSet.FindEmployeeAfterHoursWorkThirtyDayReport[intCounter].VehicleNumber;
+                        NewAfterWork.WorkDate = TheFindEmployeeAfterHoursWorkThiryDayReportDataSet.FindEmployeeAfterHoursWorkThirtyDayReport[intCounter].WorkDate;
+
+                        TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork.Rows.Add(NewAfterWork);
+                    }
+                }
+
+
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "New Blue Jay ERP Browser //  After Hours Summary Report // Load Afterhours Dataset " + Ex.ToString());
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+        }
+        public void EmailOverNightReport()
+        {
+            int intCounter;
+            int intNumberOfRecords;
+            string strWorkDate;
+            string strEmployee;
+            string strManager;
+            string strVehicleNumber;
+            string strCustomerProjectID;
+            string strAssignedProjectID;
+            string strProjectName;
+            string strOuttime;
+            string strInETA;
+            string strAssignedOffice;
+            string strBuildingAccess;
+            string strEmailAddress = "ERPProjectReports@bluejaycommunications.com";
+            string strHeader;
+            string strBody;
+
+            try
+            {
+                LoadAfterHoursDataSet();
+
+                strHeader = "After Hours Summary Report For The Last 30 Days";
+                strBody = "<h1>" + strHeader + "</h1>";
+
+                strBody += "<table>";
+                strBody += "<tr>";
+                strBody += "<td><b>Work Date</b></td>";
+                strBody += "<td><b>Employee</b></td>";
+                strBody += "<td><b>Manager</b></td>";
+                strBody += "<td><b>Vehicle Number</b></td>";
+                strBody += "<td><b>Customer Project ID</b></td>";
+                strBody += "<td><b>Assigned Project ID</b></td>";
+                strBody += "<td><b>Project Name</b></td>";
+                strBody += "<td><b>Out Time</b></td>";
+                strBody += "<td><b>In ETA</b></td>";
+                strBody += "<td><b>Assigned Office</b></td>";
+                strBody += "<td><b>Building Access</b></td>";
+                strBody += "</tr>";
+
+                intNumberOfRecords = TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork.Rows.Count;
+
+                if (intNumberOfRecords > 0)
+                {
+                    for (intCounter = 0; intCounter < intNumberOfRecords; intCounter++)
+                    {
+                        strWorkDate = Convert.ToString(TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork[intCounter].WorkDate);
+                        strEmployee = TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork[intCounter].Employee;
+                        strManager = TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork[intCounter].Manager;
+                        strVehicleNumber = TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork[intCounter].VehicleNumber;
+                        strCustomerProjectID = TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork[intCounter].CustomerProjectID;
+                        strAssignedProjectID = TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork[intCounter].AssignedProjectID;
+                        strProjectName = TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork[intCounter].ProjectName;
+                        strOuttime = TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork[intCounter].OutTime;
+                        strInETA = TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork[intCounter].InETA;
+                        strAssignedOffice = TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork[intCounter].AssignedOffice;
+                        strBuildingAccess = TheEmployeeAfterHourWorkReportDataSet.employeeafterhourwork[intCounter].BuildingAccess;
+
+                        strBody += "<tr>";
+                        strBody += "<td>" + strWorkDate + "</td>";
+                        strBody += "<td>" + strEmployee + "</td>";
+                        strBody += "<td>" + strManager + "</td>";
+                        strBody += "<td>" + strVehicleNumber + "</td>";
+                        strBody += "<td>" + strCustomerProjectID + "</td>";
+                        strBody += "<td>" + strAssignedProjectID + "</td>";
+                        strBody += "<td>" + strProjectName + "</td>";
+                        strBody += "<td>" + strOuttime + "</td>";
+                        strBody += "<td>" + strInETA + "</td>";
+                        strBody += "<td>" + strAssignedOffice + "</td>";
+                        strBody += "<td>" + strBuildingAccess + "</td>";
+                        strBody += "</tr>";
+                    }
+                }
+
+                strBody += "</table>";
+
+                TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strBody);
+
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker //  Run Punched Vs Production // Email Overnight Report " + Ex.ToString());
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+
         }
         public void CreateOverTimeReport()
         {

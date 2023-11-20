@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="EmployeeAfterHourWorkReportDataSet" targetNamespace="http://tempuri.org/EmployeeAfterHourWorkReportDataSet.xsd" xmlns:mstns="http://tempuri.org/EmployeeAfterHourWorkReportDataSet.xsd" xmlns="http://tempuri.org/EmployeeAfterHourWorkReportDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="EmployeeAfterHourWorkReportDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_UserDSName="EmployeeAfterHourWorkReportDataSet" msprop:Generator_DataSetName="EmployeeAfterHourWorkReportDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="employeeafterhourwork" msprop:Generator_RowEvHandlerName="employeeafterhourworkRowChangeEventHandler" msprop:Generator_RowDeletedName="employeeafterhourworkRowDeleted" msprop:Generator_RowDeletingName="employeeafterhourworkRowDeleting" msprop:Generator_RowEvArgName="employeeafterhourworkRowChangeEvent" msprop:Generator_TablePropName="employeeafterhourwork" msprop:Generator_RowChangedName="employeeafterhourworkRowChanged" msprop:Generator_RowChangingName="employeeafterhourworkRowChanging" msprop:Generator_TableClassName="employeeafterhourworkDataTable" msprop:Generator_RowClassName="employeeafterhourworkRow" msprop:Generator_TableVarName="tableemployeeafterhourwork" msprop:Generator_UserTableName="employeeafterhourwork">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TransactionID" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInRow="TransactionID" msprop:Generator_ColumnPropNameInTable="TransactionIDColumn" msprop:Generator_ColumnVarNameInTable="columnTransactionID" msprop:Generator_UserColumnName="TransactionID" type="xs:int" />
+              <xs:element name="WorkDate" msprop:Generator_ColumnPropNameInRow="WorkDate" msprop:Generator_ColumnPropNameInTable="WorkDateColumn" msprop:Generator_ColumnVarNameInTable="columnWorkDate" msprop:Generator_UserColumnName="WorkDate" type="xs:dateTime" />
+              <xs:element name="Employee" msprop:Generator_ColumnPropNameInRow="Employee" msprop:Generator_ColumnPropNameInTable="EmployeeColumn" msprop:Generator_ColumnVarNameInTable="columnEmployee" msprop:Generator_UserColumnName="Employee" type="xs:string" />
+              <xs:element name="Manager" msprop:Generator_ColumnPropNameInRow="Manager" msprop:Generator_ColumnPropNameInTable="ManagerColumn" msprop:Generator_ColumnVarNameInTable="columnManager" msprop:Generator_UserColumnName="Manager" type="xs:string" />
+              <xs:element name="VehicleNumber" msprop:Generator_ColumnPropNameInRow="VehicleNumber" msprop:Generator_ColumnPropNameInTable="VehicleNumberColumn" msprop:Generator_ColumnVarNameInTable="columnVehicleNumber" msprop:Generator_UserColumnName="VehicleNumber" type="xs:string" />
+              <xs:element name="CustomerProjectID" msprop:Generator_ColumnPropNameInRow="CustomerProjectID" msprop:Generator_ColumnPropNameInTable="CustomerProjectIDColumn" msprop:Generator_ColumnVarNameInTable="columnCustomerProjectID" msprop:Generator_UserColumnName="CustomerProjectID" type="xs:string" />
+              <xs:element name="AssignedProjectID" msprop:Generator_ColumnPropNameInRow="AssignedProjectID" msprop:Generator_ColumnPropNameInTable="AssignedProjectIDColumn" msprop:Generator_ColumnVarNameInTable="columnAssignedProjectID" msprop:Generator_UserColumnName="AssignedProjectID" type="xs:string" />
+              <xs:element name="ProjectName" msprop:Generator_ColumnPropNameInRow="ProjectName" msprop:Generator_ColumnPropNameInTable="ProjectNameColumn" msprop:Generator_ColumnVarNameInTable="columnProjectName" msprop:Generator_UserColumnName="ProjectName" type="xs:string" />
+              <xs:element name="OutTime" msprop:Generator_ColumnPropNameInRow="OutTime" msprop:Generator_ColumnPropNameInTable="OutTimeColumn" msprop:Generator_ColumnVarNameInTable="columnOutTime" msprop:Generator_UserColumnName="OutTime" type="xs:string" />
+              <xs:element name="InETA" msprop:Generator_ColumnPropNameInRow="InETA" msprop:Generator_ColumnPropNameInTable="InETAColumn" msprop:Generator_ColumnVarNameInTable="columnInETA" msprop:Generator_UserColumnName="InETA" type="xs:string" />
+              <xs:element name="AssignedOffice" msprop:Generator_ColumnPropNameInRow="AssignedOffice" msprop:Generator_ColumnPropNameInTable="AssignedOfficeColumn" msprop:Generator_ColumnVarNameInTable="columnAssignedOffice" msprop:Generator_UserColumnName="AssignedOffice" type="xs:string" />
+              <xs:element name="BuildingAccess" msprop:Generator_ColumnPropNameInRow="BuildingAccess" msprop:Generator_ColumnPropNameInTable="BuildingAccessColumn" msprop:Generator_ColumnVarNameInTable="columnBuildingAccess" msprop:Generator_UserColumnName="BuildingAccess" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:employeeafterhourwork" />
+      <xs:field xpath="mstns:TransactionID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>
