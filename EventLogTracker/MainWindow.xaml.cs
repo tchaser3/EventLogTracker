@@ -444,12 +444,15 @@ namespace EventLogTracker
                 datStartDate = TheDateSearchClass.SubtractingDays(datTodaysDate, 1);
                 datStartDate = TheDateSearchClass.RemoveTime(datStartDate);
 
+                //TheRunPunchedVSProductionClass.EmailOverNightReport();
+
                 if (datTodaysDate > datTransactionDate)
                 {
                     if (datTransactionDate.DayOfWeek == DayOfWeek.Saturday)
                     {
                         TheVehicleExceptionEmailDataSet.vehicleexceptionemail[0].TransactionDate = datTransactionDate;
                         TheVehicleExceptionEmailClass.UpdateVehicleExceptionEmailDB(TheVehicleExceptionEmailDataSet);
+                        TheRunPunchedVSProductionClass.EmailOverNightReport();
                     }
                     else if (datTransactionDate.DayOfWeek == DayOfWeek.Sunday)
                     {

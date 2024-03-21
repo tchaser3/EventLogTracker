@@ -12,6 +12,7 @@ using DataValidationDLL;
 using Microsoft.Win32;
 using DesignProductivityDLL;
 using AfterHoursWorkDLL;
+using System.Globalization;
 
 namespace EventLogTracker
 {
@@ -43,6 +44,8 @@ namespace EventLogTracker
         FindEmployeeProductivityMiscTotalHoursDataSet TheFindEmployeeProductivityMiscTotalHoursDataSet = new FindEmployeeProductivityMiscTotalHoursDataSet();
         FindEmployeeAfterHoursWorkThiryDayReportDataSet TheFindEmployeeAfterHoursWorkThiryDayReportDataSet = new FindEmployeeAfterHoursWorkThiryDayReportDataSet();
         EmployeeAfterHourWorkReportDataSet TheEmployeeAfterHourWorkReportDataSet = new EmployeeAfterHourWorkReportDataSet();
+        NoRecordDataSet TheNoRecordDataSet = new NoRecordDataSet();
+        FindEmployeeAfterHoursReportNotEnteredDataSet TheFindEmployeesAfterHoursNotEnteredDataSet = new FindEmployeeAfterHoursReportNotEnteredDataSet();
 
         string[] gstrLastName = new string[20];
 
@@ -52,6 +55,8 @@ namespace EventLogTracker
         decimal gdecTotalAcceptable;
         decimal gdecStandardDeviation;
         decimal gdecMean;
+        DateTime gdatPayPeriod;
+        int gintNumberOfRecords;
 
         public void RunPunchedVSProductionReport()
         {
@@ -514,10 +519,111 @@ namespace EventLogTracker
             }
             catch (Exception Ex)
             {
-                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "New Blue Jay ERP Browser //  After Hours Summary Report // Load Afterhours Dataset " + Ex.ToString());
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker // Run Punched Vs Production // Load Afterhours Dataset " + Ex.ToString());
 
                 TheMessagesClass.ErrorMessage(Ex.ToString());
             }
+        }
+        private void LoadNoRecord()
+        {
+            int intCounter;
+            int intNumberOfRecords;
+            DateTime datStartDate = DateTime.Now;
+            DateTime datEndDate = DateTime.Now;
+            int intEmployeeID;
+            int intManagerID;
+            string strEmployeeName;
+            int intTransactionID;
+            DateTime datPunchDate;
+            string strOffice;
+            string strManagerName;
+            bool blnItemFound;
+            int intSecondCounter;
+            DateTime datSecondPunchDate = DateTime.Now;
+
+
+            try
+            {
+                gdatPayPeriod = DateTime.Now;
+                TheNoRecordDataSet.norecord.Rows.Clear();
+
+                gdatPayPeriod = TheDateSearchClass.RemoveTime(gdatPayPeriod);
+                gdatPayPeriod = TheDateSearchClass.SubtractingDays(gdatPayPeriod, 9);
+
+                datEndDate = gdatPayPeriod;
+                datStartDate = TheDateSearchClass.SubtractingDays(datEndDate, 6);
+
+                TheFindEmployeesAfterHoursNotEnteredDataSet = TheAfterHoursWorkClass.FindEmployeeAfterHoursReportNotEntered(gdatPayPeriod);
+
+                intNumberOfRecords = TheFindEmployeesAfterHoursNotEnteredDataSet.FindEmployeeAfterHoursReportNotEntered.Rows.Count;
+
+                if (intNumberOfRecords > 0)
+                {
+                    for (intCounter = 0; intCounter < intNumberOfRecords; intCounter++)
+                    {
+                        intEmployeeID = TheFindEmployeesAfterHoursNotEnteredDataSet.FindEmployeeAfterHoursReportNotEntered[intCounter].EmployeeID;
+                        intManagerID = TheFindEmployeesAfterHoursNotEnteredDataSet.FindEmployeeAfterHoursReportNotEntered[intCounter].ManagerID;
+                        strEmployeeName = TheFindEmployeesAfterHoursNotEnteredDataSet.FindEmployeeAfterHoursReportNotEntered[intCounter].EmployeeName;
+                        datPunchDate = TheFindEmployeesAfterHoursNotEnteredDataSet.FindEmployeeAfterHoursReportNotEntered[intCounter].PunchDate;
+                        intTransactionID = TheFindEmployeesAfterHoursNotEnteredDataSet.FindEmployeeAfterHoursReportNotEntered[intCounter].TransactionID;
+
+                        datPunchDate = TheDateSearchClass.RemoveTime(datPunchDate);
+
+                        if (intEmployeeID != 20007)
+                        {
+                            TheFindEmployeeByEmployeeIDDataSet = TheEmployeeClass.FindEmployeeByEmployeeID(intEmployeeID);
+
+                            strOffice = TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].HomeOffice;
+
+                            TheFindEmployeeByEmployeeIDDataSet = TheEmployeeClass.FindEmployeeByEmployeeID(intManagerID);
+                            strManagerName = TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].FirstName + " ";
+                            strManagerName += TheFindEmployeeByEmployeeIDDataSet.FindEmployeeByEmployeeID[0].LastName;
+                            blnItemFound = false;
+
+                            if (gintNumberOfRecords > 0)
+                            {
+                                for (intSecondCounter = 0; intSecondCounter < gintNumberOfRecords; intSecondCounter++)
+                                {
+                                    datSecondPunchDate = TheNoRecordDataSet.norecord[intSecondCounter].PunchDate;
+                                    datSecondPunchDate = TheDateSearchClass.RemoveTime(datSecondPunchDate);
+
+                                    if (datPunchDate == datSecondPunchDate)
+                                    {
+                                        if (strEmployeeName == TheNoRecordDataSet.norecord[intSecondCounter].EmployeeName)
+                                        {
+                                            blnItemFound = true;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (blnItemFound == false)
+                            {
+                                NoRecordDataSet.norecordRow NewEmployeeRow = TheNoRecordDataSet.norecord.NewnorecordRow();
+
+                                NewEmployeeRow.EmployeeName = strEmployeeName;
+                                NewEmployeeRow.Location = strOffice;
+                                NewEmployeeRow.ManagerName = strManagerName;
+                                NewEmployeeRow.PunchDate = datPunchDate;
+                                NewEmployeeRow.TransactionID = intTransactionID;
+
+                                TheNoRecordDataSet.norecord.Rows.Add(NewEmployeeRow);
+                                gintNumberOfRecords++;
+                            }
+                        }
+
+                    }
+                }
+
+                
+            }
+            catch (Exception Ex)
+            {
+                TheEventLogClass.InsertEventLogEntry(DateTime.Now, "Event Log Tracker //  Run Punched Vs Production // Load No Record " + Ex.ToString());
+
+                TheMessagesClass.ErrorMessage(Ex.ToString());
+            }
+
         }
         public void EmailOverNightReport()
         {
@@ -541,6 +647,7 @@ namespace EventLogTracker
             try
             {
                 LoadAfterHoursDataSet();
+                LoadNoRecord();
 
                 strHeader = "After Hours Summary Report For The Last 30 Days";
                 strBody = "<h1>" + strHeader + "</h1>";
@@ -595,6 +702,39 @@ namespace EventLogTracker
                 }
 
                 strBody += "</table>";
+
+                TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strBody);
+
+                strHeader = "After Hours Punches Not Reported For Pay Period " + Convert.ToString(gdatPayPeriod);
+                strBody = "<h1>" + strHeader + "</h1>";
+
+                strBody += "<table>";
+                strBody += "<tr>";
+                strBody += "<td><b>Employee Name</b></td>";
+                strBody += "<td><b>Manager Name</b></td>";
+                strBody += "<td><b>Location</b></td>";
+                strBody += "<td><b>Punch Date</b></td>";
+                strBody += "</tr>";
+
+                intNumberOfRecords = TheNoRecordDataSet.norecord.Rows.Count;
+
+                if (intNumberOfRecords > 0)
+                {
+                    for (intCounter = 0; intCounter < intNumberOfRecords; intCounter++)
+                    {
+                        strWorkDate = Convert.ToString(TheNoRecordDataSet.norecord[intCounter].PunchDate);
+                        strEmployee = TheNoRecordDataSet.norecord[intCounter].EmployeeName;
+                        strManager = TheNoRecordDataSet.norecord[intCounter].ManagerName;
+                        strAssignedOffice = TheNoRecordDataSet.norecord[intCounter].Location;
+
+                        strBody += "<tr>";
+                        strBody += "<td>" + strEmployee + "</td>";
+                        strBody += "<td>" + strManager + "</td>";
+                        strBody += "<td>" + strAssignedOffice + "</td>";
+                        strBody += "<td>" + strWorkDate + "</td>";
+                        strBody += "</tr>";
+                    }
+                }
 
                 TheSendEmailClass.SendEmail(strEmailAddress, strHeader, strBody);
 

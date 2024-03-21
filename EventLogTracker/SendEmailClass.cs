@@ -118,19 +118,13 @@ namespace EventLogTracker
 
             try
             {
-                TheVehicleInspectionEmailListDataSet = TheSafetyClass.GetVehicleInspectionEmailListInfo();
+                strEmailAddress = "fleetreportsdl@bluejaycommunications.com";
 
-                intNumberOfRecords = TheVehicleInspectionEmailListDataSet.vehicleinspectionemaillist.Rows.Count - 1;
-
-                for (intCounter = 0; intCounter <= intNumberOfRecords; intCounter++)
-                {
-                    strEmailAddress = TheVehicleInspectionEmailListDataSet.vehicleinspectionemaillist[intCounter].EmailAddress;
-
-                    blnFatalError = SendEmail(strEmailAddress, strHeader, strVehicleReport);
-
-                    if (blnFatalError == true)
-                        throw new Exception();
-                }
+                blnFatalError = SendEmail(strEmailAddress, strHeader, strVehicleReport);
+                
+                if (blnFatalError == true)
+                    throw new Exception();
+                
             }
             catch (Exception Ex)
             {
